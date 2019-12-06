@@ -6,8 +6,8 @@
 #include "ShaderParameterUtils.h"
 #include "RHIStaticStates.h"
 
-IMPLEMENT_UNIFORM_BUFFER_STRUCT(FConstantParameters, TEXT("constants"))
-IMPLEMENT_UNIFORM_BUFFER_STRUCT(FVariableParameters, TEXT("variables"))
+IMPLEMENT_GLOBAL_SHADER_PARAMETER_STRUCT(FConstantParameters, "constants");
+IMPLEMENT_GLOBAL_SHADER_PARAMETER_STRUCT(FVariableParameters, "variables");
 
 FShaderFishPluginModule::FShaderFishPluginModule(const ShaderMetaType::CompiledShaderInitializerType& Initializer)
 	: FGlobalShader(Initializer)
@@ -15,9 +15,9 @@ FShaderFishPluginModule::FShaderFishPluginModule(const ShaderMetaType::CompiledS
 	m_shaderResource.Bind(Initializer.ParameterMap, TEXT("data"));
 }
 
-void FShaderFishPluginModule::ModifyCompilationEnvironment(EShaderPlatform Platform, FShaderCompilerEnvironment& OutEnvironment)
+void FShaderFishPluginModule::ModifyCompilationEnvironment(const FGlobalShaderPermutationParameters& Parameters, FShaderCompilerEnvironment& OutEnvironment)
 {
-	FGlobalShader::ModifyCompilationEnvironment(Platform, OutEnvironment);
+    FGlobalShader::ModifyCompilationEnvironment(Parameters, OutEnvironment);
 	OutEnvironment.CompilerFlags.Add(CFLAG_StandardOptimization);
 }
 

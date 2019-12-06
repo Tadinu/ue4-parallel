@@ -6,25 +6,25 @@
 #include "UniformBuffer.h"
 #include "RHICommandList.h"
 
-BEGIN_UNIFORM_BUFFER_STRUCT(FConstantParameters, )
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(int, fishCount)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, radiusCohesion)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, radiusSeparation)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, radiusAlignment)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, mapRangeX)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, mapRangeY)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, mapRangeZ)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, kCohesion)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, kSeparation)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, kAlignment)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, maxAcceleration)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, maxVelocity)
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(int, calculationsPerThread)
-END_UNIFORM_BUFFER_STRUCT(FConstantParameters)
+BEGIN_GLOBAL_SHADER_PARAMETER_STRUCT(FConstantParameters, )
+SHADER_PARAMETER(int, fishCount)
+SHADER_PARAMETER(float, radiusCohesion)
+SHADER_PARAMETER(float, radiusSeparation)
+SHADER_PARAMETER(float, radiusAlignment)
+SHADER_PARAMETER(float, mapRangeX)
+SHADER_PARAMETER(float, mapRangeY)
+SHADER_PARAMETER(float, mapRangeZ)
+SHADER_PARAMETER(float, kCohesion)
+SHADER_PARAMETER(float, kSeparation)
+SHADER_PARAMETER(float, kAlignment)
+SHADER_PARAMETER(float, maxAcceleration)
+SHADER_PARAMETER(float, maxVelocity)
+SHADER_PARAMETER(int, calculationsPerThread)
+END_GLOBAL_SHADER_PARAMETER_STRUCT()
 
-BEGIN_UNIFORM_BUFFER_STRUCT(FVariableParameters, )
-DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, DeltaTime)
-END_UNIFORM_BUFFER_STRUCT(FVariableParameters)
+BEGIN_GLOBAL_SHADER_PARAMETER_STRUCT(FVariableParameters, )
+SHADER_PARAMETER(float, DeltaTime)
+END_GLOBAL_SHADER_PARAMETER_STRUCT()
 
 typedef TUniformBufferRef<FConstantParameters> FConstantParametersRef;
 typedef TUniformBufferRef<FVariableParameters> FVariableParametersRef;
@@ -37,7 +37,12 @@ public:
 	explicit FShaderFishPluginModule(const ShaderMetaType::CompiledShaderInitializerType& Initializer);
 
 	static bool ShouldCache(EShaderPlatform Platform) { return IsFeatureLevelSupported(Platform, ERHIFeatureLevel::SM5); }
-	static void ModifyCompilationEnvironment(EShaderPlatform Platform, FShaderCompilerEnvironment& OutEnvironment);
+    static void ModifyCompilationEnvironment(const FGlobalShaderPermutationParameters& Parameters, FShaderCompilerEnvironment& OutEnvironment);
+
+    static bool ShouldCompilePermutation(const FGlobalShaderPermutationParameters& Parameters)
+    {
+        return IsFeatureLevelSupported(Parameters.Platform, ERHIFeatureLevel::SM5);
+    }
 
 	virtual bool Serialize(FArchive& Ar) override { bool bShaderHasOutdatedParams = FGlobalShader::Serialize(Ar); Ar << m_shaderResource; return bShaderHasOutdatedParams; }
 

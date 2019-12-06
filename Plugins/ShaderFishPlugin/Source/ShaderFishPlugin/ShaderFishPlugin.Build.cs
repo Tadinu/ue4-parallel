@@ -10,7 +10,6 @@ public class ShaderFishPlugin : ModuleRules
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
-				"ShaderFishPlugin/Public"
 				// ... add public include paths required here ...
 			}
 			);
@@ -18,7 +17,6 @@ public class ShaderFishPlugin : ModuleRules
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				"ShaderFishPlugin/Private",
 				// ... add other private include paths required here ...
 			}
 			);
@@ -31,7 +29,6 @@ public class ShaderFishPlugin : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "RenderCore",
-                "ShaderCore",
                 "RHI"
 				// ... add other public dependencies that you statically link with here ...
 			}

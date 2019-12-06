@@ -51,13 +51,12 @@ void FishProcessing::calculate(const TArray<State> &currentStates, float deltaTi
 void FishProcessing::ExecuteComputeShader(const TArray<State> &currentStates, float DeltaTime)
 {
 	m_variableParameters.DeltaTime = DeltaTime;
-	ENQUEUE_UNIQUE_RENDER_COMMAND_THREEPARAMETER( FComputeShaderRunner,
-		FishProcessing*, processing, this,
-		TArray<State>&, result, m_states,
-		const TArray<State>&, states, currentStates,
+
+    ENQUEUE_RENDER_COMMAND(FComputeShaderRunner) (
+        [this, currentStates](FRHICommandListImmediate& RHICmdList)
 		{ 
-			processing->ExecuteInRenderThread(states, result); 
-		} 
+            this->ExecuteInRenderThread(currentStates, m_states);
+        }
 	);
 }
 
