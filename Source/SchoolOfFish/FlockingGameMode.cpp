@@ -8,5 +8,5 @@
 void AFlockingGameMode::InitGameState()
 {
 	Super::InitGameState();
-	GetWorld()->SpawnActor(agent_BP);
+    GetWorld()->SpawnActor(AFishAgent::StaticClass());
 }

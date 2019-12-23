@@ -2,6 +2,10 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+#include "Modules/ModuleInterface.h"
+#include "Modules/ModuleManager.h"
+
 #include "GlobalShader.h"
 #include "UniformBuffer.h"
 #include "RHICommandList.h"
@@ -29,19 +33,53 @@ END_GLOBAL_SHADER_PARAMETER_STRUCT()
 typedef TUniformBufferRef<FConstantParameters> FConstantParametersRef;
 typedef TUniformBufferRef<FVariableParameters> FVariableParametersRef;
 
-class FShaderFishPluginModule : public FGlobalShader
+
+#define CSHADER_FISH_PLUGIN_NAME (TEXT("ShaderFishPluginModule" ))
+
+// (snote) This has to match the one being declared inside the .usf file.
+#define CSHADER_PARAMETER_NAME (TEXT("data"))
+
+class IShaderFishPluginModule : public IModuleInterface
 {
-	DECLARE_SHADER_TYPE(FShaderFishPluginModule, Global);
+
 public:
-	FShaderFishPluginModule() {}
-	explicit FShaderFishPluginModule(const ShaderMetaType::CompiledShaderInitializerType& Initializer);
+
+    /**
+     * Singleton-like access to this module's interface.  This is just for convenience!
+     * Beware of calling this during the shutdown phase, though.  Your module might have been unloaded already.
+     *
+     * @return Returns singleton instance, loading the module on demand if needed
+     */
+    static inline IShaderFishPluginModule& Get()
+    {
+        return FModuleManager::LoadModuleChecked<IShaderFishPluginModule>(CSHADER_FISH_PLUGIN_NAME);
+    }
+
+    /**
+     * Checks to see if this module is loaded and ready.  It is only valid to call Get() if IsAvailable() returns true.
+     *
+     * @return True if the module is loaded and ready to use
+     */
+    static inline bool IsAvailable()
+    {
+        return FModuleManager::Get().IsModuleLoaded(CSHADER_FISH_PLUGIN_NAME);
+    }
+};
+
+class FFishShader : public FGlobalShader
+{
+    DECLARE_SHADER_TYPE(FFishShader, Global);
+public:
+    FFishShader() {}
+    explicit FFishShader(const ShaderMetaType::CompiledShaderInitializerType& Initializer);
 
 	static bool ShouldCache(EShaderPlatform Platform) { return IsFeatureLevelSupported(Platform, ERHIFeatureLevel::SM5); }
     static void ModifyCompilationEnvironment(const FGlobalShaderPermutationParameters& Parameters, FShaderCompilerEnvironment& OutEnvironment);
 
     static bool ShouldCompilePermutation(const FGlobalShaderPermutationParameters& Parameters)
     {
-        return IsFeatureLevelSupported(Parameters.Platform, ERHIFeatureLevel::SM5);
+        return true;
+        //return IsFeatureLevelSupported(Parameters.Platform, ERHIFeatureLevel::SM5);
     }
 
 	virtual bool Serialize(FArchive& Ar) override { bool bShaderHasOutdatedParams = FGlobalShader::Serialize(Ar); Ar << m_shaderResource; return bShaderHasOutdatedParams; }

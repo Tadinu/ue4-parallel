@@ -6,9 +6,15 @@
 #include "Components/SphereComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "FishProcessing.h"
+
+#include <memory>
 #include "FishAgent.generated.h"
 
-struct FishState {
+USTRUCT()
+struct SCHOOLOFFISH_API FFishState
+{
+    GENERATED_BODY()
+
 	int32 instanceId;
 	FVector position;
 	FVector velocity;
@@ -22,62 +28,84 @@ class SCHOOLOFFISH_API AFishAgent : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	AFishAgent();
+    AFishAgent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 
+    void CreateFishMeshComponent(UStaticMesh* FishMesh);
 protected:
-	void cpuCalculate(FishState **&agents, float DeltaTime, bool isSingleThread);
+    void cpuCalculate(TArray<TArray<FFishState>>& agents, float DeltaTime, bool isSingleThread);
 	bool collisionDetected(const FVector &start, const FVector &end, FHitResult &hitResult);
 	void swapFishStatesIndexes();
 
 private:
+    FRandomStream randomGen;
 	// ~
 	// General settings to compute flocking behaviour
-	int32 m_fishNum;            // total instances of fish
+    UPROPERTY()
+    int32 m_fishNum;            // total instances of fish
+
+    UPROPERTY()
 	FVector m_mapSize;          // size of area where fish can flock
+    UPROPERTY()
 	float m_oceanFloorZ;		// Z coordinate of ocean floor
+    UPROPERTY()
 	float m_spawningRange;		// spawning range in persents of map size
+    UPROPERTY()
 	float m_maxVelocity;        // maximum velocity of fish
+    UPROPERTY()
 	float m_maxAcceleration;    // maximum acceleration of fish
+    UPROPERTY()
 	float m_radiusCohesion;     // Cohesion radius. The radius inside which the fish will tend to inside the circle (approach) 
+    UPROPERTY()
 	float m_radiusSeparation;   // Separation radius. The radius within which the fish will tend to avoid collisions 
+    UPROPERTY()
 	float m_radiusAlignment;    // Alignment radius. The radius inside which the fish will tend to follow in one direction
 	// Gain factors for the three types of fish behavior. By default  all three gain factors are equals 1.0f
+    UPROPERTY()
 	float m_kCohesion;          
+    UPROPERTY()
 	float m_kSeparation;
+    UPROPERTY()
 	float m_kAlignment;
 	// ~
 
-	// Array of fish states if flocking behaviour calculates on CPU
-	FishState** m_fishStates;
+	// Array of fish states if flocking behaviour calculates on CPU    
+    TArray<TArray<FFishState>> m_fishStates;
 
 	// index of fish states array where stored current states of fish
+    UPROPERTY()
 	int32 m_currentStatesIndex;
 
 	// index of fish states array where stored previous states of fish
-	int32 m_previousStatesIndex;
+    UPROPERTY()
+    int32 m_previousStatesIndex;
 
 	// Array of fish states if flocking behaviour calculates on GPU
-	TArray<State> m_gpuFishStates;
+    TArray<State> m_gpuFishStates;
 
 	// Single or multithreaded algorithm. CPU only.
+    UPROPERTY()
 	bool m_isCpuSingleThread;
 	
 	// This flag indicates where fish state should be calculated. On GPU or on CPU. CPU - by default
+    UPROPERTY()
 	bool m_isGpu;
 
 	// time elapsed from last calculation
+    UPROPERTY()
 	float m_elapsedTime = 0.f;
 
-	// Fish static mesh object
-	UStaticMesh *m_staticMesh;
-
 	// Fish instanced static mesh component. This component contains all of the fish instances on the scene
-	UInstancedStaticMeshComponent *m_instancedStaticMeshComponent;
+    // A component that efficiently renders multiple instances of the same StaticMesh
+    UPROPERTY()
+    UInstancedStaticMeshComponent *m_instancedStaticMeshComponent = nullptr;
+
+    UPROPERTY()
+    UStaticMesh* m_staticMesh = nullptr;
 
 	// Pointer to the class FishProcessing which uses compute shader plugin to calculate flocking behaviour on GPU
-	FishProcessing *m_gpuProcessing;
+    std::unique_ptr<FishProcessing> m_gpuProcessing = nullptr;
 };

@@ -13,7 +13,4 @@ class SCHOOLOFFISH_API AFlockingGameMode : public AGameMode
 
 public:
 	virtual void InitGameState() override;
-
-	UPROPERTY(EditAnywhere, Category = FlockingConfig)
-		TSubclassOf<class AFishAgent> agent_BP;
 };

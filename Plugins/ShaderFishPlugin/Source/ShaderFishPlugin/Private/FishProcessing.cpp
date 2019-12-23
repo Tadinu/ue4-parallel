@@ -1,9 +1,10 @@
-// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
+﻿// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #include "FishProcessing.h"
 #include "CoreUObject.h"
 #include "Engine.h"
 
+#include <iostream>
 #define NUM_THREADS_PER_GROUP_DIMENSION 128 
 
 FishProcessing::FishProcessing(int32 fishCount, float radiusCohesion, float radiusSeparation, float radiusAlignment,
@@ -27,13 +28,11 @@ FishProcessing::FishProcessing(int32 fishCount, float radiusCohesion, float radi
 
 	m_variableParameters = FVariableParameters();
 
-	for (int i = 0; i < 2 * m_constantParameters.fishCount; i++) {
-		m_states.Add(State());
-	}
+    m_states.SetNumZeroed(fishCount);
 
-	m_threadNumGroupCount = (m_constantParameters.fishCount % (NUM_THREADS_PER_GROUP_DIMENSION * m_constantParameters.calculationsPerThread) == 0 ?
-		m_constantParameters.fishCount / (NUM_THREADS_PER_GROUP_DIMENSION * m_constantParameters.calculationsPerThread) :
-		m_constantParameters.fishCount / (NUM_THREADS_PER_GROUP_DIMENSION * m_constantParameters.calculationsPerThread) + 1);
+    m_threadNumGroupCount = (fishCount % (NUM_THREADS_PER_GROUP_DIMENSION * m_constantParameters.calculationsPerThread) == 0 ?
+        fishCount / (NUM_THREADS_PER_GROUP_DIMENSION * m_constantParameters.calculationsPerThread) :
+        fishCount / (NUM_THREADS_PER_GROUP_DIMENSION * m_constantParameters.calculationsPerThread) + 1);
 	m_threadNumGroupCount = m_threadNumGroupCount == 0 ? 1 : m_threadNumGroupCount;
 }
 
@@ -53,7 +52,7 @@ void FishProcessing::ExecuteComputeShader(const TArray<State> &currentStates, fl
 	m_variableParameters.DeltaTime = DeltaTime;
 
     ENQUEUE_RENDER_COMMAND(FComputeShaderRunner) (
-        [this, currentStates](FRHICommandListImmediate& RHICmdList)
+        [&, this, currentStates=currentStates](FRHICommandListImmediate& RHICmdList)
 		{ 
             this->ExecuteInRenderThread(currentStates, m_states);
         }
@@ -63,33 +62,54 @@ void FishProcessing::ExecuteComputeShader(const TArray<State> &currentStates, fl
 void FishProcessing::ExecuteInRenderThread(const TArray<State> &currentStates, TArray<State> &result)
 {
 	check(IsInRenderingThread());
+    int32 fishNum = m_constantParameters.fishCount;
+    verify(currentStates.Num() == fishNum &&
+           result.Num() == fishNum);
 
-	TResourceArray<State> data;
-	for (int i = 0; i < m_constantParameters.fishCount; i++) {
-		data.Add(currentStates[i]);
-	}
-	for (int i = 0; i < m_constantParameters.fishCount; i++) {
-		data.Add(currentStates[i]);
+    // Prepare RHI Resource Data
+    //
+    TResourceArray<State> rhiData;
+    for (int32 i = 0; i < 2 * fishNum; i++) {
+        rhiData.Add(currentStates[i % fishNum]);
 	}
 
-	FRHIResourceCreateInfo resource;
-	resource.ResourceArray = &data;
-	FStructuredBufferRHIRef buffer = RHICreateStructuredBuffer(sizeof(State), sizeof(State) * 2 * m_constantParameters.fishCount, BUF_UnorderedAccess | 0, resource);
+    FRHIResourceCreateInfo rhiResource;
+    rhiResource.ResourceArray = &rhiData;
+
+    static int32 stateSize = sizeof(State);
+    int32 bufferSize = stateSize * 2 * fishNum;
+
+    FStructuredBufferRHIRef buffer = RHICreateStructuredBuffer(stateSize, bufferSize,
+                                                               BUF_UnorderedAccess | BUF_ShaderResource | 0 , rhiResource);
 	FUnorderedAccessViewRHIRef uav = RHICreateUnorderedAccessView(buffer, false, false);
 
-	FRHICommandListImmediate& commandList = GRHICommandList.GetImmediateCommandList();
-	TShaderMapRef<FShaderFishPluginModule> shader(GetGlobalShaderMap(m_featureLevel));
+    FRHICommandListImmediate& commandList = GRHICommandList.GetImmediateCommandList();
+
+    // Compute shader operation on the buffer
+    //
+    TShaderMapRef<FFishShader> shader(GetGlobalShaderMap(m_featureLevel));
 	commandList.SetComputeShader(shader->GetComputeShader());
 	shader->setShaderData(commandList, uav);
 	shader->setUniformBuffers(commandList, m_constantParameters, m_variableParameters);
 	DispatchComputeShader(commandList, *shader, 1, m_threadNumGroupCount, 1);
 	shader->cleanupShaderData(commandList);	
 
-	char* shaderData = (char*)commandList.LockStructuredBuffer(buffer, 0, sizeof(State) * 2 * m_constantParameters.fishCount, EResourceLockMode::RLM_ReadOnly);
-	State* p = (State*)shaderData;
-	for (int32 Row = 0; Row < m_constantParameters.fishCount; ++Row) {
-		result[Row] = *p;
-		p++;
-	}
+    // Read result data from the buffer
+    //
+    char* shaderData = (char*)commandList.LockStructuredBuffer(buffer, 0, bufferSize,
+                                                               EResourceLockMode::RLM_ReadOnly);
+    State* newStateData = reinterpret_cast<State*>(shaderData);
+
+    int32 bufferCount = buffer->GetSize()/stateSize;
+    verify(bufferCount == rhiData.Num())
+    //std::cout << "BUFFER ELEMENT NUM: " << bufferCount << std::endl;
+
+    for (int32 i = 0; i < fishNum; i++) {
+        if(newStateData) {
+            result[i] = *newStateData;
+            newStateData++;
+        }
+    }
+
 	commandList.UnlockStructuredBuffer(buffer);
 }
