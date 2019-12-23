@@ -78,7 +78,7 @@ void FishProcessing::ExecuteInRenderThread(const TArray<State> &currentStates, T
 	FUnorderedAccessViewRHIRef uav = RHICreateUnorderedAccessView(buffer, false, false);
 
 	FRHICommandListImmediate& commandList = GRHICommandList.GetImmediateCommandList();
-	TShaderMapRef<FShaderFishPluginModule> shader(GetGlobalShaderMap(m_featureLevel));
+    TShaderMapRef<FFishShader> shader(GetGlobalShaderMap(m_featureLevel));
 	commandList.SetComputeShader(shader->GetComputeShader());
 	shader->setShaderData(commandList, uav);
 	shader->setUniformBuffers(commandList, m_constantParameters, m_variableParameters);
