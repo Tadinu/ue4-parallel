@@ -12,8 +12,6 @@
 #include "ShaderCore.h"
 
 #include <iostream>
-IMPLEMENT_GLOBAL_SHADER_PARAMETER_STRUCT(FConstantParameters, "constants");
-IMPLEMENT_GLOBAL_SHADER_PARAMETER_STRUCT(FVariableParameters, "variables");
 
 class FShaderFishPluginModule : public IShaderFishPluginModule
 {
@@ -54,25 +52,31 @@ void FFishShader::ModifyCompilationEnvironment(const FGlobalShaderPermutationPar
 	OutEnvironment.CompilerFlags.Add(CFLAG_StandardOptimization);
 }
 
-void FFishShader::setShaderData(FRHICommandList& commandList, FUnorderedAccessViewRHIRef uav)
+void FFishShader::SetShaderBuffer(FRHICommandList& commandList, const FRWBufferStructured& buffer)
 {
-    if (m_shaderResource.IsBound()) {
-		commandList.SetUAVParameter(GetComputeShader(), m_shaderResource.GetBaseIndex(), uav);
-    }
+    m_shaderRWParameter.SetBuffer(commandList, GetComputeShader(), buffer);
 }
 
-void FFishShader::setUniformBuffers(FRHICommandList& commandList, FConstantParameters& constants, FVariableParameters& variables)
+void FFishShader::SetShaderUAVParameter(FRHICommandList& commandList, FUnorderedAccessViewRHIRef uav)
 {
-	SetUniformBufferParameter(commandList, GetComputeShader(), GetUniformBufferParameter<FConstantParameters>(),
-		FConstantParametersRef::CreateUniformBufferImmediate(constants, UniformBuffer_SingleDraw));
-	SetUniformBufferParameter(commandList, GetComputeShader(), GetUniformBufferParameter<FVariableParameters>(),
-		FVariableParametersRef::CreateUniformBufferImmediate(variables, UniformBuffer_SingleDraw));
+    SetUAVParameter(commandList, GetComputeShader(), m_shaderResource, uav);
+}
+
+void FFishShader::SetShaderSRVParameter(FRHICommandList& commandList, FShaderResourceViewRHIRef srv)
+{
+    SetSRVParameter(commandList, GetComputeShader(), m_shaderResource, srv);
+}
+
+void FFishShader::SetUniformBufferParameters(FRHICommandList& commandList, const FFishShader::FParameters& parameters)
+{
+    SetLocalUniformBufferParameter(commandList, GetComputeShader(), GetUniformBufferParameter(FFishShader::FParameters::FTypeInfo::GetStructMetadata()),
+        FFishShader::FParametersRef::CreateLocalUniformBuffer(commandList, parameters, UniformBuffer_SingleDraw));
 }
 
 void FFishShader::cleanupShaderData(FRHICommandList& commandList)
 {
-	if (m_shaderResource.IsBound())
-		commandList.SetUAVParameter(GetComputeShader(), m_shaderResource.GetBaseIndex(), FUnorderedAccessViewRHIRef());
+    SetUAVParameter(commandList, GetComputeShader(), m_shaderResource, FUnorderedAccessViewRHIRef());
+    m_shaderRWParameter.UnsetUAV(commandList, GetComputeShader());
 }
 
 // Ref: https://forums.unrealengine.com/development-discussion/c-gameplay-programming/29352-tutorial-pixel-and-compute-shaders-in-ue4?58489-Tutorial-Pixel-and-Compute-Shaders-in-UE4=

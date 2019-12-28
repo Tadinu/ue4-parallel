@@ -209,11 +209,11 @@ void AFishAgent::Tick(float DeltaTime)
             FTransform transform;
             for (int32 i = 0; i < m_fishNum; i++) {
 				m_instancedStaticMeshComponent->GetInstanceTransform(m_gpuFishStates[i].instanceId, transform);
+				transform.SetLocation(FVector(m_gpuFishStates[i].position[0], m_gpuFishStates[i].position[1], m_gpuFishStates[i].position[2]));
+				transform.SetRotation(FRotationMatrix::MakeFromX(FVector(m_gpuFishStates[i].velocity[0], m_gpuFishStates[i].velocity[1], m_gpuFishStates[i].velocity[2])).Rotator().Add(0.f, -90.f, 0.f).Quaternion());
                 if(transform.ContainsNaN()) {
                     continue;
                 }
-				transform.SetLocation(FVector(m_gpuFishStates[i].position[0], m_gpuFishStates[i].position[1], m_gpuFishStates[i].position[2]));
-				transform.SetRotation(FRotationMatrix::MakeFromX(FVector(m_gpuFishStates[i].velocity[0], m_gpuFishStates[i].velocity[1], m_gpuFishStates[i].velocity[2])).Rotator().Add(0.f, -90.f, 0.f).Quaternion());
                 m_instancedStaticMeshComponent->UpdateInstanceTransform(m_gpuFishStates[i].instanceId, transform);
 			}
 #if 0 // THIS CAUSE CRASH ON PerInstanceRenderData going INVALID

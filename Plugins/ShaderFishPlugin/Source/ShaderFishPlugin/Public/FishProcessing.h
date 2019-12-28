@@ -8,6 +8,15 @@ struct State {
 	float position[3] = { 0, 0, 0 };
 	float velocity[3] = { 0, 0, 0 };
 	float acceleration[3] = { 0, 0, 0 };
+
+    // SteerInfo
+    float steerCohesion[3] = { 0, 0, 0 };
+    float steerSeparation[3] = { 0, 0, 0 };
+    float steerAlignment[3] = { 0, 0, 0 };
+
+    int32 steerCohesionCnt   = 0;
+    int32 steerSeparationCnt = 0;
+    int32 steerAlignmentCnt  = 0;
 };
 
 class SHADERFISHPLUGIN_API FishProcessing
@@ -23,13 +32,16 @@ public:
 
 protected:
     void ExecuteComputeShader(const TArray<State> &currentStates, float DeltaTime);
-    void ExecuteInRenderThread(const TArray<State> &currentStates, TArray<State> &result);
+    void ExecuteInRenderThread(int32 threadNumGroupCount,
+                               const FFishShader::FParameters& parameters,
+                               ERHIFeatureLevel::Type featureLevel,
+                               const TArray<State> &currentStates, TArray<State> &result);
 
 private:
-	FConstantParameters m_constantParameters;
-	FVariableParameters m_variableParameters;
+    FFishShader::FParameters m_parameters;
+    FShaderResourceParameter UploadCurrentStateData;
 	ERHIFeatureLevel::Type m_featureLevel;
     TArray<State> m_states;
-	int32 m_threadNumGroupCount;
+    int32 m_threadNumGroupCount = 0;
 	FRenderCommandFence ReleaseResourcesFence;
 };

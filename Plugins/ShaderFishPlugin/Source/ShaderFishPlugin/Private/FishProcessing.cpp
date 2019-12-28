@@ -3,6 +3,7 @@
 #include "FishProcessing.h"
 #include "CoreUObject.h"
 #include "Engine.h"
+#include "RenderGraphUtils.h"
 
 #include <iostream>
 #define NUM_THREADS_PER_GROUP_DIMENSION 128 
@@ -12,27 +13,25 @@ FishProcessing::FishProcessing(int32 fishCount, float radiusCohesion, float radi
 	float maxAcceleration, float maxVelocity, ERHIFeatureLevel::Type ShaderFeatureLevel)
 {
 	m_featureLevel = ShaderFeatureLevel;
-	m_constantParameters.fishCount = fishCount;
-	m_constantParameters.radiusCohesion = radiusCohesion;
-	m_constantParameters.radiusSeparation = radiusSeparation;
-	m_constantParameters.radiusAlignment = radiusAlignment;
-	m_constantParameters.mapRangeX = mapRangeX;
-	m_constantParameters.mapRangeY = mapRangeY;
-	m_constantParameters.mapRangeZ = mapRangeZ;
-	m_constantParameters.kCohesion = kCohesion;
-	m_constantParameters.kSeparation = kSeparation;
-	m_constantParameters.kAlignment = kAlignment;
-	m_constantParameters.maxAcceleration = maxAcceleration;
-	m_constantParameters.maxVelocity = maxVelocity;
-	m_constantParameters.calculationsPerThread = 1;
-
-	m_variableParameters = FVariableParameters();
+    m_parameters.fishCount = fishCount;
+    m_parameters.radiusCohesion = radiusCohesion;
+    m_parameters.radiusSeparation = radiusSeparation;
+    m_parameters.radiusAlignment = radiusAlignment;
+    m_parameters.mapRangeX = mapRangeX;
+    m_parameters.mapRangeY = mapRangeY;
+    m_parameters.mapRangeZ = mapRangeZ;
+    m_parameters.kCohesion = kCohesion;
+    m_parameters.kSeparation = kSeparation;
+    m_parameters.kAlignment = kAlignment;
+    m_parameters.maxAcceleration = maxAcceleration;
+    m_parameters.maxVelocity = maxVelocity;
+    m_parameters.calculationsPerThread = 1;
 
     m_states.SetNumZeroed(fishCount);
 
-    m_threadNumGroupCount = (fishCount % (NUM_THREADS_PER_GROUP_DIMENSION * m_constantParameters.calculationsPerThread) == 0 ?
-        fishCount / (NUM_THREADS_PER_GROUP_DIMENSION * m_constantParameters.calculationsPerThread) :
-        fishCount / (NUM_THREADS_PER_GROUP_DIMENSION * m_constantParameters.calculationsPerThread) + 1);
+    m_threadNumGroupCount = (fishCount % (NUM_THREADS_PER_GROUP_DIMENSION * m_parameters.calculationsPerThread) == 0 ?
+        fishCount / (NUM_THREADS_PER_GROUP_DIMENSION * m_parameters.calculationsPerThread) :
+        fishCount / (NUM_THREADS_PER_GROUP_DIMENSION * m_parameters.calculationsPerThread) + 1);
 	m_threadNumGroupCount = m_threadNumGroupCount == 0 ? 1 : m_threadNumGroupCount;
 }
 
@@ -49,67 +48,86 @@ void FishProcessing::calculate(const TArray<State> &currentStates, float deltaTi
 
 void FishProcessing::ExecuteComputeShader(const TArray<State> &currentStates, float DeltaTime)
 {
-	m_variableParameters.DeltaTime = DeltaTime;
+    m_parameters.DeltaTime = DeltaTime;
 
     ENQUEUE_RENDER_COMMAND(FComputeShaderRunner) (
         [&, this, currentStates=currentStates](FRHICommandListImmediate& RHICmdList)
 		{ 
-            this->ExecuteInRenderThread(currentStates, m_states);
+            this->ExecuteInRenderThread(m_threadNumGroupCount,
+                                        m_parameters,
+                                        m_featureLevel,
+                                        currentStates, m_states);
         }
 	);
 }
 
-void FishProcessing::ExecuteInRenderThread(const TArray<State> &currentStates, TArray<State> &result)
+void FishProcessing::ExecuteInRenderThread(int32 threadNumGroupCount,
+                                           const FFishShader::FParameters& parameters,
+                                           ERHIFeatureLevel::Type featureLevel,
+                                           const TArray<State> &currentStates, TArray<State> &result)
 {
 	check(IsInRenderingThread());
-    int32 fishNum = m_constantParameters.fishCount;
-    verify(currentStates.Num() == fishNum &&
-           result.Num() == fishNum);
+    if(parameters.fishCount <= 0) {
+         return;
+    }
+    verify(currentStates.Num() == parameters.fishCount &&
+           result.Num() == parameters.fishCount);
 
     // Prepare RHI Resource Data
     //
     TResourceArray<State> rhiData;
-    for (int32 i = 0; i < 2 * fishNum; i++) {
-        rhiData.Add(currentStates[i % fishNum]);
+    for (int32 i = 0; i < 2 * parameters.fishCount; i++) {
+        rhiData.Add(currentStates[i % parameters.fishCount]);
 	}
+    FRHIResourceCreateInfo resource(&rhiData);
 
-    FRHIResourceCreateInfo rhiResource;
-    rhiResource.ResourceArray = &rhiData;
-
+    // Create RW Structured Buffer
     static int32 stateSize = sizeof(State);
-    int32 bufferSize = stateSize * 2 * fishNum;
+    int32 bufferSize = stateSize * 2 * parameters.fishCount;
 
-    FStructuredBufferRHIRef buffer = RHICreateStructuredBuffer(stateSize, bufferSize,
-                                                               BUF_UnorderedAccess | BUF_ShaderResource | 0 , rhiResource);
-	FUnorderedAccessViewRHIRef uav = RHICreateUnorderedAccessView(buffer, false, false);
+    FRWBufferStructured buffer;
+    buffer.Buffer = RHICreateStructuredBuffer(stateSize, bufferSize,
+                                              BUF_UnorderedAccess | BUF_ShaderResource | 0,
+                                              resource);
+    buffer.UAV = RHICreateUnorderedAccessView(buffer.Buffer, false, false);
+    buffer.SRV = RHICreateShaderResourceView(buffer.Buffer);
 
-    FRHICommandListImmediate& commandList = GRHICommandList.GetImmediateCommandList();
+    // Transition resource to GPU
+    FRHICommandListImmediate& rhiCommandList = GRHICommandList.GetImmediateCommandList();
+    rhiCommandList.TransitionResource(EResourceTransitionAccess::ERWBarrier,
+                                      EResourceTransitionPipeline::EGfxToCompute,
+                                      buffer.UAV);
 
-    // Compute shader operation on the buffer
-    //
-    TShaderMapRef<FFishShader> shader(GetGlobalShaderMap(m_featureLevel));
-	commandList.SetComputeShader(shader->GetComputeShader());
-	shader->setShaderData(commandList, uav);
-	shader->setUniformBuffers(commandList, m_constantParameters, m_variableParameters);
-	DispatchComputeShader(commandList, *shader, 1, m_threadNumGroupCount, 1);
-	shader->cleanupShaderData(commandList);	
+    // Dispatch & Compute shader in GPU
+    TShaderMapRef<FFishShader> shader(GetGlobalShaderMap(featureLevel));
+#if 0
+    // Call to SetComputeShader & SetShaderParameters here-in
+    FComputeShaderUtils::Dispatch(rhiCommandList, *shader, parameters, FIntVector(1, threadNumGroupCount, 1));
+#else
+    rhiCommandList.SetComputeShader(shader->GetComputeShader());
+    shader->SetShaderUAVParameter(rhiCommandList, buffer.UAV);
+    shader->SetShaderSRVParameter(rhiCommandList, buffer.SRV);
+    shader->SetUniformBufferParameters(rhiCommandList, parameters);
+    DispatchComputeShader(rhiCommandList, *shader, threadNumGroupCount, 1, 1);
+    shader->cleanupShaderData(rhiCommandList);
+#endif
 
     // Read result data from the buffer
     //
-    char* shaderData = (char*)commandList.LockStructuredBuffer(buffer, 0, bufferSize,
+    char* shaderData = (char*)rhiCommandList.LockStructuredBuffer(buffer.Buffer, 0, bufferSize,
                                                                EResourceLockMode::RLM_ReadOnly);
     State* newStateData = reinterpret_cast<State*>(shaderData);
 
-    int32 bufferCount = buffer->GetSize()/stateSize;
+    int32 bufferCount = buffer.Buffer->GetSize()/stateSize;
     verify(bufferCount == rhiData.Num())
     //std::cout << "BUFFER ELEMENT NUM: " << bufferCount << std::endl;
 
-    for (int32 i = 0; i < fishNum; i++) {
+    for (int32 i = 0; i < parameters.fishCount; i++) {
         if(newStateData) {
             result[i] = *newStateData;
             newStateData++;
         }
     }
 
-	commandList.UnlockStructuredBuffer(buffer);
+    rhiCommandList.UnlockStructuredBuffer(buffer.Buffer);
 }

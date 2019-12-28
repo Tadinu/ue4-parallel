@@ -10,34 +10,10 @@
 #include "UniformBuffer.h"
 #include "RHICommandList.h"
 
-BEGIN_GLOBAL_SHADER_PARAMETER_STRUCT(FConstantParameters, )
-SHADER_PARAMETER(int, fishCount)
-SHADER_PARAMETER(float, radiusCohesion)
-SHADER_PARAMETER(float, radiusSeparation)
-SHADER_PARAMETER(float, radiusAlignment)
-SHADER_PARAMETER(float, mapRangeX)
-SHADER_PARAMETER(float, mapRangeY)
-SHADER_PARAMETER(float, mapRangeZ)
-SHADER_PARAMETER(float, kCohesion)
-SHADER_PARAMETER(float, kSeparation)
-SHADER_PARAMETER(float, kAlignment)
-SHADER_PARAMETER(float, maxAcceleration)
-SHADER_PARAMETER(float, maxVelocity)
-SHADER_PARAMETER(int, calculationsPerThread)
-END_GLOBAL_SHADER_PARAMETER_STRUCT()
-
-BEGIN_GLOBAL_SHADER_PARAMETER_STRUCT(FVariableParameters, )
-SHADER_PARAMETER(float, DeltaTime)
-END_GLOBAL_SHADER_PARAMETER_STRUCT()
-
-typedef TUniformBufferRef<FConstantParameters> FConstantParametersRef;
-typedef TUniformBufferRef<FVariableParameters> FVariableParametersRef;
-
-
 #define CSHADER_FISH_PLUGIN_NAME (TEXT("ShaderFishPluginModule" ))
 
 // (snote) This has to match the one being declared inside the .usf file.
-#define CSHADER_PARAMETER_NAME (TEXT("data"))
+#define CSHADER_PARAMETER_NAME (TEXT("RWData"))
 
 class IShaderFishPluginModule : public IModuleInterface
 {
@@ -69,6 +45,24 @@ public:
 class FFishShader : public FGlobalShader
 {
     DECLARE_SHADER_TYPE(FFishShader, Global);
+    BEGIN_SHADER_PARAMETER_STRUCT(FParameters, ) // Cannot have any name else but FParameters" (UE Rule)
+        SHADER_PARAMETER(int, fishCount)
+        SHADER_PARAMETER(float, radiusCohesion)
+        SHADER_PARAMETER(float, radiusSeparation)
+        SHADER_PARAMETER(float, radiusAlignment)
+        SHADER_PARAMETER(float, mapRangeX)
+        SHADER_PARAMETER(float, mapRangeY)
+        SHADER_PARAMETER(float, mapRangeZ)
+        SHADER_PARAMETER(float, kCohesion)
+        SHADER_PARAMETER(float, kSeparation)
+        SHADER_PARAMETER(float, kAlignment)
+        SHADER_PARAMETER(float, maxAcceleration)
+        SHADER_PARAMETER(float, maxVelocity)
+        SHADER_PARAMETER(int, calculationsPerThread)
+        SHADER_PARAMETER(float, DeltaTime)
+    END_SHADER_PARAMETER_STRUCT()
+
+    typedef TUniformBufferRef<FParameters> FParametersRef;
 public:
     FFishShader() {}
     explicit FFishShader(const ShaderMetaType::CompiledShaderInitializerType& Initializer);
@@ -84,10 +78,13 @@ public:
 
 	virtual bool Serialize(FArchive& Ar) override { bool bShaderHasOutdatedParams = FGlobalShader::Serialize(Ar); Ar << m_shaderResource; return bShaderHasOutdatedParams; }
 
-	void setShaderData(FRHICommandList& commandList, FUnorderedAccessViewRHIRef uav);
-	void setUniformBuffers(FRHICommandList& commandList, FConstantParameters& constants, FVariableParameters& variables);
+    void SetShaderBuffer(FRHICommandList& commandList, const FRWBufferStructured& buffer);
+    void SetShaderUAVParameter(FRHICommandList& commandList, FUnorderedAccessViewRHIRef uav);
+    void SetShaderSRVParameter(FRHICommandList& commandList, FShaderResourceViewRHIRef srv);
+    void SetUniformBufferParameters(FRHICommandList& commandList, const FFishShader::FParameters& parameters);
 	void cleanupShaderData(FRHICommandList& commandList);
 
 private:
 	FShaderResourceParameter m_shaderResource;
+    FRWShaderParameter m_shaderRWParameter; // To be used in case either using only SRV or UAV as the resource
 };
