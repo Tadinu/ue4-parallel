@@ -1,7 +1,7 @@
 #include "/Engine/Private/Common.ush"
 
 struct TInfo{
-	int instanceId;
+	int instanceIndex;
 	float3 position;
 	float3 velocity;
 	float3 acceleration;
@@ -53,10 +53,11 @@ void MainComputeShader(uint3 ThreadId : SV_DispatchThreadID)
 
 	int currentId = fishCount + currentThreadId;
 
+	TInfo currentState = RWData[currentId];
+	TInfo newState     = RWData[currentThreadId];
+
 	for (int iteration = 0; iteration < calculationsPerThread; iteration++) {
-		TInfo currentState = RWData[currentId];
-		TInfo newState = RWData[currentThreadId];
-		
+	
 		for(int i = fishCount; i < 2 * fishCount; i++) {
 			if(i == currentId) {
 				continue;

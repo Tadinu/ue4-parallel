@@ -138,11 +138,11 @@ void AFishAgent::OnConstruction(const FTransform& Transform)
 		t.SetRotation(randRotator.Quaternion());
         t.SetScale3D(10.f * FVector::OneVector);
 
-		int32 instanceId = m_instancedStaticMeshComponent->AddInstance(t);
-
+        int32 instanceIndex = m_instancedStaticMeshComponent->AddInstance(t);
+        //std::cout << " ADD INSTANCE " << instanceIndex << std::endl;
 		if (m_isGpu) {
             State gpustate;
-			gpustate.instanceId = instanceId;
+            gpustate.instanceIndex = instanceIndex;
             gpustate.position[0] = randomPos.X; gpustate.position[1] = randomPos.Y; gpustate.position[2] = randomPos.Z;
             gpustate.velocity[0] = randRotator.Vector().X * 10000; gpustate.velocity[1] = randRotator.Vector().Y * 10000; gpustate.velocity[2] = randRotator.Vector().Z * 10000;
             gpustate.acceleration[0] = 0.f; gpustate.acceleration[1] = 0.f; gpustate.acceleration[2] = 0.f;
@@ -151,7 +151,7 @@ void AFishAgent::OnConstruction(const FTransform& Transform)
 			FFishState state;
 			FFishState stateCopy;
             m_fishStates[i].SetNumZeroed(2);
-			stateCopy.instanceId = state.instanceId = instanceId;;
+            stateCopy.instanceIndex = state.instanceIndex = instanceIndex;
 			stateCopy.position = state.position = randomPos;
 			stateCopy.velocity = state.velocity = randRotator.Vector() * 10000;
 			stateCopy.acceleration = state.acceleration = FVector::ZeroVector;
@@ -184,37 +184,47 @@ void AFishAgent::Tick(float DeltaTime)
         if (m_elapsedTime > 0.016f) {
             //m_instancedStaticMeshComponent->InitPerInstanceRenderData(false);
 
-			m_gpuProcessing->calculate(m_gpuFishStates, DeltaTime);
             TArray<State> previousGpuFishStates = m_gpuFishStates;
+			m_gpuProcessing->calculate(m_gpuFishStates, DeltaTime);
             m_gpuProcessing->getStates(m_gpuFishStates);
 
-            if (previousGpuFishStates.Num() == m_gpuFishStates.Num()) {
-				for (int i = 0; i < previousGpuFishStates.Num(); i++) {
-					FHitResult hit(ForceInit);
-					if (collisionDetected(FVector(previousGpuFishStates[i].position[0], previousGpuFishStates[i].position[1], previousGpuFishStates[i].position[2]),
-						FVector(m_gpuFishStates[i].position[0], m_gpuFishStates[i].position[1], m_gpuFishStates[i].position[2]), hit)) {
-						m_gpuFishStates[i].position[0] -= m_gpuFishStates[i].velocity[0] * DeltaTime;
-						m_gpuFishStates[i].position[1] -= m_gpuFishStates[i].velocity[1] * DeltaTime;
-						m_gpuFishStates[i].position[2] -= m_gpuFishStates[i].velocity[2] * DeltaTime;
-						m_gpuFishStates[i].velocity[0] *= -1.0;
-						m_gpuFishStates[i].velocity[1] *= -1.0;
-						m_gpuFishStates[i].velocity[2] *= -1.0;
-						m_gpuFishStates[i].position[0] += m_gpuFishStates[i].velocity[0] * DeltaTime;
-						m_gpuFishStates[i].position[1] += m_gpuFishStates[i].velocity[1] * DeltaTime;
-						m_gpuFishStates[i].position[2] += m_gpuFishStates[i].velocity[2] * DeltaTime;
-					}
-				}
-			}
+            verify(previousGpuFishStates.Num() == m_gpuFishStates.Num())
+
+            for (int32 i = 0; i < previousGpuFishStates.Num(); i++) {
+                FHitResult hit(ForceInit);
+                m_gpuFishStates[i].instanceIndex = previousGpuFishStates[i].instanceIndex;
+                if (collisionDetected(previousGpuFishStates[i].location(),
+                                      m_gpuFishStates[i].location(), hit)) {
+                    m_gpuFishStates[i].position[0] -= m_gpuFishStates[i].velocity[0] * DeltaTime;
+                    m_gpuFishStates[i].position[1] -= m_gpuFishStates[i].velocity[1] * DeltaTime;
+                    m_gpuFishStates[i].position[2] -= m_gpuFishStates[i].velocity[2] * DeltaTime;
+                    m_gpuFishStates[i].velocity[0] *= -1.f;
+                    m_gpuFishStates[i].velocity[1] *= -1.f;
+                    m_gpuFishStates[i].velocity[2] *= -1.f;
+                    m_gpuFishStates[i].position[0] += m_gpuFishStates[i].velocity[0] * DeltaTime;
+                    m_gpuFishStates[i].position[1] += m_gpuFishStates[i].velocity[1] * DeltaTime;
+                    m_gpuFishStates[i].position[2] += m_gpuFishStates[i].velocity[2] * DeltaTime;
+                }
+            }
 
             FTransform transform;
+            bool bWorldSpace = false;
             for (int32 i = 0; i < m_fishNum; i++) {
-				m_instancedStaticMeshComponent->GetInstanceTransform(m_gpuFishStates[i].instanceId, transform);
-				transform.SetLocation(FVector(m_gpuFishStates[i].position[0], m_gpuFishStates[i].position[1], m_gpuFishStates[i].position[2]));
-				transform.SetRotation(FRotationMatrix::MakeFromX(FVector(m_gpuFishStates[i].velocity[0], m_gpuFishStates[i].velocity[1], m_gpuFishStates[i].velocity[2])).Rotator().Add(0.f, -90.f, 0.f).Quaternion());
-                if(transform.ContainsNaN()) {
+                const State& gpuFishState = m_gpuFishStates[i];
+                transform = FTransform::Identity;
+
+                if(!m_instancedStaticMeshComponent->GetInstanceTransform(gpuFishState.instanceIndex, transform, bWorldSpace)) {
                     continue;
                 }
-                m_instancedStaticMeshComponent->UpdateInstanceTransform(m_gpuFishStates[i].instanceId, transform);
+
+                transform.SetLocation(gpuFishState.location());
+                //transform.SetRotation(FRotationMatrix::MakeFromX(gpuFishState.vel()).Rotator().Add(0.f, -90.f, 0.f).Quaternion());
+
+                if(transform.ContainsNaN()) {
+                    std::cout << gpuFishState.instanceIndex << " NAN" << std::endl;
+                    continue;
+                }
+                m_instancedStaticMeshComponent->UpdateInstanceTransform(i, transform, bWorldSpace);
 			}
 #if 0 // THIS CAUSE CRASH ON PerInstanceRenderData going INVALID
             m_instancedStaticMeshComponent->ReleasePerInstanceRenderData();
@@ -306,12 +316,12 @@ void AFishAgent::cpuCalculate(TArray<TArray<FFishState>>& agents, float DeltaTim
 
 	for (int i = 0; i < cnt; i++) {
 		FTransform transform;
-		m_instancedStaticMeshComponent->GetInstanceTransform(agents[i][0].instanceId, transform);
+        m_instancedStaticMeshComponent->GetInstanceTransform(agents[i][0].instanceIndex, transform);
 		transform.SetLocation(agents[i][0].position);
 		FVector direction = agents[i][0].velocity;
 		direction.Normalize();
 		transform.SetRotation(FRotationMatrix::MakeFromX(direction).Rotator().Add(0.f, -90.f, 0.f).Quaternion());
-		m_instancedStaticMeshComponent->UpdateInstanceTransform(agents[i][0].instanceId, transform, false, false);
+        m_instancedStaticMeshComponent->UpdateInstanceTransform(agents[i][0].instanceIndex, transform, false, false);
 	}
 
     std::cout << " INSTANCED RANDOM SEED " << m_instancedStaticMeshComponent->InstancingRandomSeed << std::endl;

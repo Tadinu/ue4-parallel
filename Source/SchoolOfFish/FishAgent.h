@@ -15,7 +15,7 @@ struct SCHOOLOFFISH_API FFishState
 {
     GENERATED_BODY()
 
-	int32 instanceId;
+    int32 instanceIndex;
 	FVector position;
 	FVector velocity;
 	FVector acceleration;

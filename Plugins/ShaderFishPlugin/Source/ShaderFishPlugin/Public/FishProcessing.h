@@ -4,7 +4,7 @@
 #include "RenderCommandFence.h"
 
 struct State {
-	int32 instanceId = 0;
+    int32 instanceIndex = 0;
 	float position[3] = { 0, 0, 0 };
 	float velocity[3] = { 0, 0, 0 };
 	float acceleration[3] = { 0, 0, 0 };
@@ -17,6 +17,14 @@ struct State {
     int32 steerCohesionCnt   = 0;
     int32 steerSeparationCnt = 0;
     int32 steerAlignmentCnt  = 0;
+
+    FVector location() const {
+        return FVector(position[0], position[1], position[2]);
+    }
+
+    FVector vel() const {
+        return FVector(velocity[0], velocity[1], velocity[2]);
+    }
 };
 
 class SHADERFISHPLUGIN_API FishProcessing

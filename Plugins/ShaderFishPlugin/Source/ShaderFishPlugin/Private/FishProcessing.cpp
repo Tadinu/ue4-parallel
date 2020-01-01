@@ -50,6 +50,10 @@ void FishProcessing::ExecuteComputeShader(const TArray<State> &currentStates, fl
 {
     m_parameters.DeltaTime = DeltaTime;
 
+    verify(m_states.Num() == currentStates.Num())
+    for(auto i = 0; i < currentStates.Num(); i++) {
+        m_states[i] = currentStates[i];
+    }
     ENQUEUE_RENDER_COMMAND(FComputeShaderRunner) (
         [&, this, currentStates=currentStates](FRHICommandListImmediate& RHICmdList)
 		{ 
