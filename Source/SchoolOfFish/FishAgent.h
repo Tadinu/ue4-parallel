@@ -5,10 +5,12 @@
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
-#include "FishProcessing.h"
+#include "FishShaderProcessing.h"
 
 #include <memory>
 #include "FishAgent.generated.h"
+
+#define USING_GPU_COMPUTER_SHADER (0)
 
 USTRUCT()
 struct SCHOOLOFFISH_API FFishState
@@ -35,6 +37,11 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
     void CreateFishMeshComponent(UStaticMesh* FishMesh);
+    bool SetFishInstanceTransform(int32 InstanceIndex, const FTransform& FishTransform);
+    FTransform GetFishInstanceTransform(int32 InstanceIndex);
+    bool AddForceToFishInstance(int32 InstanceIndex, const FVector& Force);
+    FORCEINLINE void SetFishUpdateRequest(bool bInUpdateNeeded) { bUpdateNeeded = bInUpdateNeeded; }
+    FORCEINLINE bool IsFishUpdateNeeded() { return bUpdateNeeded; }
 protected:
     void cpuCalculate(TArray<TArray<FFishState>>& agents, float DeltaTime, bool isSingleThread);
 	bool collisionDetected(const FVector &start, const FVector &end, FHitResult &hitResult);
@@ -46,6 +53,9 @@ private:
 	// General settings to compute flocking behaviour
     UPROPERTY()
     int32 m_fishNum;            // total instances of fish
+
+    UPROPERTY()
+    bool bUpdateNeeded = false;
 
     UPROPERTY()
 	FVector m_mapSize;          // size of area where fish can flock
@@ -107,5 +117,5 @@ private:
     UStaticMesh* m_staticMesh = nullptr;
 
 	// Pointer to the class FishProcessing which uses compute shader plugin to calculate flocking behaviour on GPU
-    std::unique_ptr<FishProcessing> m_gpuProcessing = nullptr;
+    std::unique_ptr<FishShaderProcessing> m_gpuProcessing = nullptr;
 };

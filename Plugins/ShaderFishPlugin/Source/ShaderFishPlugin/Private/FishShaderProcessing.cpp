@@ -1,6 +1,6 @@
 ﻿// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
-#include "FishProcessing.h"
+#include "FishShaderProcessing.h"
 #include "CoreUObject.h"
 #include "Engine.h"
 #include "RenderGraphUtils.h"
@@ -8,7 +8,7 @@
 #include <iostream>
 #define NUM_THREADS_PER_GROUP_DIMENSION 128 
 
-FishProcessing::FishProcessing(int32 fishCount, float radiusCohesion, float radiusSeparation, float radiusAlignment,
+FishShaderProcessing::FishShaderProcessing(int32 fishCount, float radiusCohesion, float radiusSeparation, float radiusAlignment,
 	float mapRangeX, float mapRangeY, float mapRangeZ, float kCohesion, float kSeparation, float kAlignment,
 	float maxAcceleration, float maxVelocity, ERHIFeatureLevel::Type ShaderFeatureLevel)
 {
@@ -35,18 +35,18 @@ FishProcessing::FishProcessing(int32 fishCount, float radiusCohesion, float radi
 	m_threadNumGroupCount = m_threadNumGroupCount == 0 ? 1 : m_threadNumGroupCount;
 }
 
-FishProcessing::~FishProcessing()
+FishShaderProcessing::~FishShaderProcessing()
 {
 }
 
-void FishProcessing::calculate(const TArray<State> &currentStates, float deltaTime)
+void FishShaderProcessing::calculate(const TArray<State> &currentStates, float deltaTime)
 {
 	ExecuteComputeShader(currentStates, deltaTime);
 	ReleaseResourcesFence.BeginFence();
 	ReleaseResourcesFence.Wait();
 }
 
-void FishProcessing::ExecuteComputeShader(const TArray<State> &currentStates, float DeltaTime)
+void FishShaderProcessing::ExecuteComputeShader(const TArray<State> &currentStates, float DeltaTime)
 {
     m_parameters.DeltaTime = DeltaTime;
 
@@ -65,7 +65,7 @@ void FishProcessing::ExecuteComputeShader(const TArray<State> &currentStates, fl
 	);
 }
 
-void FishProcessing::ExecuteInRenderThread(int32 threadNumGroupCount,
+void FishShaderProcessing::ExecuteInRenderThread(int32 threadNumGroupCount,
                                            const FFishShader::FParameters& parameters,
                                            ERHIFeatureLevel::Type featureLevel,
                                            const TArray<State> &currentStates, TArray<State> &result)

@@ -21,19 +21,29 @@ struct State {
     FVector location() const {
         return FVector(position[0], position[1], position[2]);
     }
+    void setLocation(const FVector& loc) {
+        position[0] = loc.X;
+        position[1] = loc.Y;
+        position[2] = loc.Z;
+    }
 
     FVector vel() const {
         return FVector(velocity[0], velocity[1], velocity[2]);
     }
+    void setVel(const FVector& vel) {
+        velocity[0] = vel.X;
+        velocity[1] = vel.Y;
+        velocity[2] = vel.Z;
+    }
 };
 
-class SHADERFISHPLUGIN_API FishProcessing
+class SHADERFISHPLUGIN_API FishShaderProcessing
 {
 public:
-    FishProcessing(int32 fishCount, float radiusCohesion, float radiusSeparation, float radiusAlignment,
+    FishShaderProcessing(int32 fishCount, float radiusCohesion, float radiusSeparation, float radiusAlignment,
 		float mapRangeX, float mapRangeY, float mapRangeZ, float kCohesion, float kSeparation, float kAlignment, 
 		float maxAcceleration, float maxVelocity, ERHIFeatureLevel::Type ShaderFeatureLevel);
-    ~FishProcessing();
+    ~FishShaderProcessing();
 
     void calculate(const TArray<State> &currentStates, float deltaTime);
     void getStates(TArray<State>& OutStates) { OutStates = m_states; }

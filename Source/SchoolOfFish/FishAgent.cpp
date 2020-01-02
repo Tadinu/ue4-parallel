@@ -161,12 +161,80 @@ void AFishAgent::OnConstruction(const FTransform& Transform)
 	}
 }
 
+bool AFishAgent::SetFishInstanceTransform(int32 InstanceIndex, const FTransform& FishTransform)
+{
+    if(InstanceIndex < 0 || InstanceIndex >= m_instancedStaticMeshComponent->GetInstanceCount()) {
+        return false;
+    }
+
+    // Update self-managed fish instance state
+    if (m_isGpu) {
+        float DeltaTime = GetWorld()->GetDeltaSeconds();
+        const State& previousFishState = m_gpuFishStates[InstanceIndex];
+        State& newFishState            = m_gpuFishStates[InstanceIndex];
+
+        newFishState.setLocation(FishTransform.GetLocation());
+
+        FHitResult hit(ForceInit);
+        if (collisionDetected(previousFishState.location(),
+                              FishTransform.GetLocation(), hit)) {
+            newFishState.position[0] -= newFishState.velocity[0] * DeltaTime;
+            newFishState.position[1] -= newFishState.velocity[1] * DeltaTime;
+            newFishState.position[2] -= newFishState.velocity[2] * DeltaTime;
+            newFishState.velocity[0] *= -1.f;
+            newFishState.velocity[1] *= -1.f;
+            newFishState.velocity[2] *= -1.f;
+            newFishState.position[0] += newFishState.velocity[0] * DeltaTime;
+            newFishState.position[1] += newFishState.velocity[1] * DeltaTime;
+            newFishState.position[2] += newFishState.velocity[2] * DeltaTime;
+        }    
+
+        // Update the Instance Static Mesh Component
+        FTransform newTransform;
+        if(!m_instancedStaticMeshComponent->GetInstanceTransform(InstanceIndex, newTransform)) {
+            return false;
+        }
+
+        newTransform.SetLocation(newFishState.location());
+        //transform.SetRotation(FRotationMatrix::MakeFromX(newFishState.vel()).Rotator().Add(0.f, -90.f, 0.f).Quaternion());
+
+        m_instancedStaticMeshComponent->UpdateInstanceTransform(InstanceIndex, newTransform, false, true);
+    }
+    else {
+        //FFishState& fishState = m_fishStates[InstanceIndex][0];
+        //fishState.position = FishTransform.GetLocation();
+
+        // TBD...
+    }
+    return true;
+}
+
+FTransform AFishAgent::GetFishInstanceTransform(int32 InstanceIndex)
+{
+    if(InstanceIndex < 0 || InstanceIndex >= m_instancedStaticMeshComponent->GetInstanceCount()) {
+        return FTransform::Identity;
+    }
+
+    FTransform transform;
+    m_instancedStaticMeshComponent->GetInstanceTransform(InstanceIndex, transform);
+    return transform;
+}
+
+bool AFishAgent::AddForceToFishInstance(int32 InstanceIndex, const FVector& Force)
+{
+    if(InstanceIndex < 0 || InstanceIndex >= m_instancedStaticMeshComponent->GetInstanceCount()) {
+        return false;
+    }
+    m_instancedStaticMeshComponent->AddImpulse(Force);
+    return false;
+}
+
 void AFishAgent::BeginPlay()
 {
 	Super::BeginPlay();
 
 	if (m_isGpu) {
-        m_gpuProcessing = std::make_unique<FishProcessing>(m_fishNum,
+        m_gpuProcessing = std::make_unique<FishShaderProcessing>(m_fishNum,
 			m_radiusCohesion, m_radiusSeparation, m_radiusAlignment,
 			m_mapSize.X, m_mapSize.Y, m_mapSize.Z,
 			m_kCohesion, m_kSeparation, m_kAlignment,
@@ -181,6 +249,7 @@ void AFishAgent::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (m_isGpu) {
+#if USING_GPU_COMPUTER_SHADER
         if (m_elapsedTime > 0.016f) {
             //m_instancedStaticMeshComponent->InitPerInstanceRenderData(false);
 
@@ -233,7 +302,10 @@ void AFishAgent::Tick(float DeltaTime)
 			m_elapsedTime = 0.f;
 		} else {
 			m_elapsedTime += DeltaTime;
+            SetFishUpdateRequest(false);
 		}
+#else
+#endif
 	} else {
 		if (m_elapsedTime > 0.016f) {
 			cpuCalculate(m_fishStates, DeltaTime, m_isCpuSingleThread);

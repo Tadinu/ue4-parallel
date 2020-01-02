@@ -4,9 +4,12 @@
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "FishAgent.h"
+#include "GrpcServerWrapper.h"
 
 void AFlockingGameMode::InitGameState()
 {
 	Super::InitGameState();
-    GetWorld()->SpawnActor(AFishAgent::StaticClass());
+    AFishAgent* fishAgent                 = Cast<AFishAgent>(GetWorld()->SpawnActor(AFishAgent::StaticClass()));
+    AGrpcServerWrapper* grpcServerWrapper = Cast<AGrpcServerWrapper>(GetWorld()->SpawnActor(AGrpcServerWrapper::StaticClass()));
+    grpcServerWrapper->StartActorRPC(fishAgent);
 }
