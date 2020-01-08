@@ -47,44 +47,55 @@ struct TableStruct_ActorOperation_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[8]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
   static const ::PROTOBUF_NAMESPACE_ID::uint32 offsets[];
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_ActorOperation_2eproto;
+namespace rpc {
+class ActorEnvironmentInfo;
+class ActorEnvironmentInfoDefaultTypeInternal;
+extern ActorEnvironmentInfoDefaultTypeInternal _ActorEnvironmentInfo_default_instance_;
+class ActorInstanceForce;
+class ActorInstanceForceDefaultTypeInternal;
+extern ActorInstanceForceDefaultTypeInternal _ActorInstanceForce_default_instance_;
+class ActorInstanceIndex;
+class ActorInstanceIndexDefaultTypeInternal;
+extern ActorInstanceIndexDefaultTypeInternal _ActorInstanceIndex_default_instance_;
+class ActorInstanceInfo;
+class ActorInstanceInfoDefaultTypeInternal;
+extern ActorInstanceInfoDefaultTypeInternal _ActorInstanceInfo_default_instance_;
+class ActorInstanceTransform;
+class ActorInstanceTransformDefaultTypeInternal;
+extern ActorInstanceTransformDefaultTypeInternal _ActorInstanceTransform_default_instance_;
 class Empty;
 class EmptyDefaultTypeInternal;
 extern EmptyDefaultTypeInternal _Empty_default_instance_;
-class InstanceForce;
-class InstanceForceDefaultTypeInternal;
-extern InstanceForceDefaultTypeInternal _InstanceForce_default_instance_;
-class InstanceIndex;
-class InstanceIndexDefaultTypeInternal;
-extern InstanceIndexDefaultTypeInternal _InstanceIndex_default_instance_;
-class InstanceTransform;
-class InstanceTransformDefaultTypeInternal;
-extern InstanceTransformDefaultTypeInternal _InstanceTransform_default_instance_;
 class Transform;
 class TransformDefaultTypeInternal;
 extern TransformDefaultTypeInternal _Transform_default_instance_;
 class Vector3D;
 class Vector3DDefaultTypeInternal;
 extern Vector3DDefaultTypeInternal _Vector3D_default_instance_;
+}  // namespace rpc
 PROTOBUF_NAMESPACE_OPEN
-template<> ::Empty* Arena::CreateMaybeMessage<::Empty>(Arena*);
-template<> ::InstanceForce* Arena::CreateMaybeMessage<::InstanceForce>(Arena*);
-template<> ::InstanceIndex* Arena::CreateMaybeMessage<::InstanceIndex>(Arena*);
-template<> ::InstanceTransform* Arena::CreateMaybeMessage<::InstanceTransform>(Arena*);
-template<> ::Transform* Arena::CreateMaybeMessage<::Transform>(Arena*);
-template<> ::Vector3D* Arena::CreateMaybeMessage<::Vector3D>(Arena*);
+template<> ::rpc::ActorEnvironmentInfo* Arena::CreateMaybeMessage<::rpc::ActorEnvironmentInfo>(Arena*);
+template<> ::rpc::ActorInstanceForce* Arena::CreateMaybeMessage<::rpc::ActorInstanceForce>(Arena*);
+template<> ::rpc::ActorInstanceIndex* Arena::CreateMaybeMessage<::rpc::ActorInstanceIndex>(Arena*);
+template<> ::rpc::ActorInstanceInfo* Arena::CreateMaybeMessage<::rpc::ActorInstanceInfo>(Arena*);
+template<> ::rpc::ActorInstanceTransform* Arena::CreateMaybeMessage<::rpc::ActorInstanceTransform>(Arena*);
+template<> ::rpc::Empty* Arena::CreateMaybeMessage<::rpc::Empty>(Arena*);
+template<> ::rpc::Transform* Arena::CreateMaybeMessage<::rpc::Transform>(Arena*);
+template<> ::rpc::Vector3D* Arena::CreateMaybeMessage<::rpc::Vector3D>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
+namespace rpc {
 
 // ===================================================================
 
 class Empty :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Empty) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rpc.Empty) */ {
  public:
   Empty();
   virtual ~Empty();
@@ -168,7 +179,7 @@ class Empty :
   void InternalSwap(Empty* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Empty";
+    return "rpc.Empty";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -192,7 +203,7 @@ class Empty :
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:Empty)
+  // @@protoc_insertion_point(class_scope:rpc.Empty)
  private:
   class HasBitSetters;
 
@@ -203,7 +214,7 @@ class Empty :
 // -------------------------------------------------------------------
 
 class Vector3D :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Vector3D) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rpc.Vector3D) */ {
  public:
   Vector3D();
   virtual ~Vector3D();
@@ -212,6 +223,10 @@ class Vector3D :
   Vector3D(Vector3D&& from) noexcept
     : Vector3D() {
     *this = ::std::move(from);
+  }
+
+  Vector3D(float x, float y, float z) {
+      x_ = x; y_ = y; z_ = z;
   }
 
   inline Vector3D& operator=(const Vector3D& from) {
@@ -287,7 +302,7 @@ class Vector3D :
   void InternalSwap(Vector3D* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Vector3D";
+    return "rpc.Vector3D";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -329,7 +344,7 @@ class Vector3D :
   float z() const;
   void set_z(float value);
 
-  // @@protoc_insertion_point(class_scope:Vector3D)
+  // @@protoc_insertion_point(class_scope:rpc.Vector3D)
  private:
   class HasBitSetters;
 
@@ -342,134 +357,8 @@ class Vector3D :
 };
 // -------------------------------------------------------------------
 
-class InstanceIndex :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:InstanceIndex) */ {
- public:
-  InstanceIndex();
-  virtual ~InstanceIndex();
-
-  InstanceIndex(const InstanceIndex& from);
-  InstanceIndex(InstanceIndex&& from) noexcept
-    : InstanceIndex() {
-    *this = ::std::move(from);
-  }
-
-  inline InstanceIndex& operator=(const InstanceIndex& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline InstanceIndex& operator=(InstanceIndex&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return GetMetadataStatic().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return GetMetadataStatic().reflection;
-  }
-  static const InstanceIndex& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const InstanceIndex* internal_default_instance() {
-    return reinterpret_cast<const InstanceIndex*>(
-               &_InstanceIndex_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    2;
-
-  void Swap(InstanceIndex* other);
-  friend void swap(InstanceIndex& a, InstanceIndex& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline InstanceIndex* New() const final {
-    return CreateMaybeMessage<InstanceIndex>(nullptr);
-  }
-
-  InstanceIndex* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<InstanceIndex>(arena);
-  }
-  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const InstanceIndex& from);
-  void MergeFrom(const InstanceIndex& from);
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  #else
-  bool MergePartialFromCodedStream(
-      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
-  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  void SerializeWithCachedSizes(
-      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
-  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
-      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  inline void SharedCtor();
-  inline void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(InstanceIndex* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "InstanceIndex";
-  }
-  private:
-  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
-    return nullptr;
-  }
-  inline void* MaybeArenaPtr() const {
-    return nullptr;
-  }
-  public:
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-  private:
-  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_ActorOperation_2eproto);
-    return ::descriptor_table_ActorOperation_2eproto.file_level_metadata[kIndexInFileMessages];
-  }
-
-  public:
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // int32 index = 1;
-  void clear_index();
-  static const int kIndexFieldNumber = 1;
-  ::PROTOBUF_NAMESPACE_ID::int32 index() const;
-  void set_index(::PROTOBUF_NAMESPACE_ID::int32 value);
-
-  // @@protoc_insertion_point(class_scope:InstanceIndex)
- private:
-  class HasBitSetters;
-
-  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::int32 index_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_ActorOperation_2eproto;
-};
-// -------------------------------------------------------------------
-
 class Transform :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Transform) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rpc.Transform) */ {
  public:
   Transform();
   virtual ~Transform();
@@ -478,6 +367,11 @@ class Transform :
   Transform(Transform&& from) noexcept
     : Transform() {
     *this = ::std::move(from);
+  }
+  Transform(const Vector3D& rotation, const Vector3D& position, const Vector3D& scale) {
+      *rotation_ = rotation;
+      *position_ = position;
+      *scale_ = scale;
   }
 
   inline Transform& operator=(const Transform& from) {
@@ -510,7 +404,7 @@ class Transform :
                &_Transform_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    2;
 
   void Swap(Transform* other);
   friend void swap(Transform& a, Transform& b) {
@@ -553,7 +447,7 @@ class Transform :
   void InternalSwap(Transform* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Transform";
+    return "rpc.Transform";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -577,63 +471,63 @@ class Transform :
 
   // accessors -------------------------------------------------------
 
-  // .Vector3D position = 1;
+  // .rpc.Vector3D position = 1;
   bool has_position() const;
   void clear_position();
   static const int kPositionFieldNumber = 1;
-  const ::Vector3D& position() const;
-  ::Vector3D* release_position();
-  ::Vector3D* mutable_position();
-  void set_allocated_position(::Vector3D* position);
+  const ::rpc::Vector3D& position() const;
+  ::rpc::Vector3D* release_position();
+  ::rpc::Vector3D* mutable_position();
+  void set_allocated_position(::rpc::Vector3D* position);
 
-  // .Vector3D rotation = 2;
+  // .rpc.Vector3D rotation = 2;
   bool has_rotation() const;
   void clear_rotation();
   static const int kRotationFieldNumber = 2;
-  const ::Vector3D& rotation() const;
-  ::Vector3D* release_rotation();
-  ::Vector3D* mutable_rotation();
-  void set_allocated_rotation(::Vector3D* rotation);
+  const ::rpc::Vector3D& rotation() const;
+  ::rpc::Vector3D* release_rotation();
+  ::rpc::Vector3D* mutable_rotation();
+  void set_allocated_rotation(::rpc::Vector3D* rotation);
 
-  // .Vector3D scale = 3;
+  // .rpc.Vector3D scale = 3;
   bool has_scale() const;
   void clear_scale();
   static const int kScaleFieldNumber = 3;
-  const ::Vector3D& scale() const;
-  ::Vector3D* release_scale();
-  ::Vector3D* mutable_scale();
-  void set_allocated_scale(::Vector3D* scale);
+  const ::rpc::Vector3D& scale() const;
+  ::rpc::Vector3D* release_scale();
+  ::rpc::Vector3D* mutable_scale();
+  void set_allocated_scale(::rpc::Vector3D* scale);
 
-  // @@protoc_insertion_point(class_scope:Transform)
+  // @@protoc_insertion_point(class_scope:rpc.Transform)
  private:
   class HasBitSetters;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::Vector3D* position_;
-  ::Vector3D* rotation_;
-  ::Vector3D* scale_;
+  ::rpc::Vector3D* position_;
+  ::rpc::Vector3D* rotation_;
+  ::rpc::Vector3D* scale_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_ActorOperation_2eproto;
 };
 // -------------------------------------------------------------------
 
-class InstanceTransform :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:InstanceTransform) */ {
+class ActorInstanceIndex :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rpc.ActorInstanceIndex) */ {
  public:
-  InstanceTransform();
-  virtual ~InstanceTransform();
+  ActorInstanceIndex();
+  virtual ~ActorInstanceIndex();
 
-  InstanceTransform(const InstanceTransform& from);
-  InstanceTransform(InstanceTransform&& from) noexcept
-    : InstanceTransform() {
+  ActorInstanceIndex(const ActorInstanceIndex& from);
+  ActorInstanceIndex(ActorInstanceIndex&& from) noexcept
+    : ActorInstanceIndex() {
     *this = ::std::move(from);
   }
 
-  inline InstanceTransform& operator=(const InstanceTransform& from) {
+  inline ActorInstanceIndex& operator=(const ActorInstanceIndex& from) {
     CopyFrom(from);
     return *this;
   }
-  inline InstanceTransform& operator=(InstanceTransform&& from) noexcept {
+  inline ActorInstanceIndex& operator=(ActorInstanceIndex&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -651,34 +545,160 @@ class InstanceTransform :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const InstanceTransform& default_instance();
+  static const ActorInstanceIndex& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const InstanceTransform* internal_default_instance() {
-    return reinterpret_cast<const InstanceTransform*>(
-               &_InstanceTransform_default_instance_);
+  static inline const ActorInstanceIndex* internal_default_instance() {
+    return reinterpret_cast<const ActorInstanceIndex*>(
+               &_ActorInstanceIndex_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  void Swap(ActorInstanceIndex* other);
+  friend void swap(ActorInstanceIndex& a, ActorInstanceIndex& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ActorInstanceIndex* New() const final {
+    return CreateMaybeMessage<ActorInstanceIndex>(nullptr);
+  }
+
+  ActorInstanceIndex* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ActorInstanceIndex>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ActorInstanceIndex& from);
+  void MergeFrom(const ActorInstanceIndex& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ActorInstanceIndex* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rpc.ActorInstanceIndex";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_ActorOperation_2eproto);
+    return ::descriptor_table_ActorOperation_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 id = 1;
+  void clear_id();
+  static const int kIdFieldNumber = 1;
+  ::PROTOBUF_NAMESPACE_ID::int32 id() const;
+  void set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:rpc.ActorInstanceIndex)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::int32 id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_ActorOperation_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ActorInstanceTransform :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rpc.ActorInstanceTransform) */ {
+ public:
+  ActorInstanceTransform();
+  virtual ~ActorInstanceTransform();
+
+  ActorInstanceTransform(const ActorInstanceTransform& from);
+  ActorInstanceTransform(ActorInstanceTransform&& from) noexcept
+    : ActorInstanceTransform() {
+    *this = ::std::move(from);
+  }
+
+  inline ActorInstanceTransform& operator=(const ActorInstanceTransform& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ActorInstanceTransform& operator=(ActorInstanceTransform&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ActorInstanceTransform& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ActorInstanceTransform* internal_default_instance() {
+    return reinterpret_cast<const ActorInstanceTransform*>(
+               &_ActorInstanceTransform_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     4;
 
-  void Swap(InstanceTransform* other);
-  friend void swap(InstanceTransform& a, InstanceTransform& b) {
+  void Swap(ActorInstanceTransform* other);
+  friend void swap(ActorInstanceTransform& a, ActorInstanceTransform& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline InstanceTransform* New() const final {
-    return CreateMaybeMessage<InstanceTransform>(nullptr);
+  inline ActorInstanceTransform* New() const final {
+    return CreateMaybeMessage<ActorInstanceTransform>(nullptr);
   }
 
-  InstanceTransform* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<InstanceTransform>(arena);
+  ActorInstanceTransform* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ActorInstanceTransform>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const InstanceTransform& from);
-  void MergeFrom(const InstanceTransform& from);
+  void CopyFrom(const ActorInstanceTransform& from);
+  void MergeFrom(const ActorInstanceTransform& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -699,10 +719,10 @@ class InstanceTransform :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(InstanceTransform* other);
+  void InternalSwap(ActorInstanceTransform* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "InstanceTransform";
+    return "rpc.ActorInstanceTransform";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -726,14 +746,14 @@ class InstanceTransform :
 
   // accessors -------------------------------------------------------
 
-  // .Transform transform = 2;
+  // .rpc.Transform transform = 2;
   bool has_transform() const;
   void clear_transform();
   static const int kTransformFieldNumber = 2;
-  const ::Transform& transform() const;
-  ::Transform* release_transform();
-  ::Transform* mutable_transform();
-  void set_allocated_transform(::Transform* transform);
+  const ::rpc::Transform& transform() const;
+  ::rpc::Transform* release_transform();
+  ::rpc::Transform* mutable_transform();
+  void set_allocated_transform(::rpc::Transform* transform);
 
   // int32 index = 1;
   void clear_index();
@@ -741,35 +761,35 @@ class InstanceTransform :
   ::PROTOBUF_NAMESPACE_ID::int32 index() const;
   void set_index(::PROTOBUF_NAMESPACE_ID::int32 value);
 
-  // @@protoc_insertion_point(class_scope:InstanceTransform)
+  // @@protoc_insertion_point(class_scope:rpc.ActorInstanceTransform)
  private:
   class HasBitSetters;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::Transform* transform_;
+  ::rpc::Transform* transform_;
   ::PROTOBUF_NAMESPACE_ID::int32 index_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_ActorOperation_2eproto;
 };
 // -------------------------------------------------------------------
 
-class InstanceForce :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:InstanceForce) */ {
+class ActorInstanceForce :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rpc.ActorInstanceForce) */ {
  public:
-  InstanceForce();
-  virtual ~InstanceForce();
+  ActorInstanceForce();
+  virtual ~ActorInstanceForce();
 
-  InstanceForce(const InstanceForce& from);
-  InstanceForce(InstanceForce&& from) noexcept
-    : InstanceForce() {
+  ActorInstanceForce(const ActorInstanceForce& from);
+  ActorInstanceForce(ActorInstanceForce&& from) noexcept
+    : ActorInstanceForce() {
     *this = ::std::move(from);
   }
 
-  inline InstanceForce& operator=(const InstanceForce& from) {
+  inline ActorInstanceForce& operator=(const ActorInstanceForce& from) {
     CopyFrom(from);
     return *this;
   }
-  inline InstanceForce& operator=(InstanceForce&& from) noexcept {
+  inline ActorInstanceForce& operator=(ActorInstanceForce&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -787,34 +807,34 @@ class InstanceForce :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const InstanceForce& default_instance();
+  static const ActorInstanceForce& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const InstanceForce* internal_default_instance() {
-    return reinterpret_cast<const InstanceForce*>(
-               &_InstanceForce_default_instance_);
+  static inline const ActorInstanceForce* internal_default_instance() {
+    return reinterpret_cast<const ActorInstanceForce*>(
+               &_ActorInstanceForce_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     5;
 
-  void Swap(InstanceForce* other);
-  friend void swap(InstanceForce& a, InstanceForce& b) {
+  void Swap(ActorInstanceForce* other);
+  friend void swap(ActorInstanceForce& a, ActorInstanceForce& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline InstanceForce* New() const final {
-    return CreateMaybeMessage<InstanceForce>(nullptr);
+  inline ActorInstanceForce* New() const final {
+    return CreateMaybeMessage<ActorInstanceForce>(nullptr);
   }
 
-  InstanceForce* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<InstanceForce>(arena);
+  ActorInstanceForce* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ActorInstanceForce>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const InstanceForce& from);
-  void MergeFrom(const InstanceForce& from);
+  void CopyFrom(const ActorInstanceForce& from);
+  void MergeFrom(const ActorInstanceForce& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -835,10 +855,10 @@ class InstanceForce :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(InstanceForce* other);
+  void InternalSwap(ActorInstanceForce* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "InstanceForce";
+    return "rpc.ActorInstanceForce";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -862,14 +882,14 @@ class InstanceForce :
 
   // accessors -------------------------------------------------------
 
-  // .Vector3D force = 2;
+  // .rpc.Vector3D force = 2;
   bool has_force() const;
   void clear_force();
   static const int kForceFieldNumber = 2;
-  const ::Vector3D& force() const;
-  ::Vector3D* release_force();
-  ::Vector3D* mutable_force();
-  void set_allocated_force(::Vector3D* force);
+  const ::rpc::Vector3D& force() const;
+  ::rpc::Vector3D* release_force();
+  ::rpc::Vector3D* mutable_force();
+  void set_allocated_force(::rpc::Vector3D* force);
 
   // int32 index = 1;
   void clear_index();
@@ -877,13 +897,437 @@ class InstanceForce :
   ::PROTOBUF_NAMESPACE_ID::int32 index() const;
   void set_index(::PROTOBUF_NAMESPACE_ID::int32 value);
 
-  // @@protoc_insertion_point(class_scope:InstanceForce)
+  // @@protoc_insertion_point(class_scope:rpc.ActorInstanceForce)
  private:
   class HasBitSetters;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::Vector3D* force_;
+  ::rpc::Vector3D* force_;
   ::PROTOBUF_NAMESPACE_ID::int32 index_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_ActorOperation_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ActorInstanceInfo :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rpc.ActorInstanceInfo) */ {
+ public:
+  ActorInstanceInfo();
+  virtual ~ActorInstanceInfo();
+
+  ActorInstanceInfo(const ActorInstanceInfo& from);
+  ActorInstanceInfo(ActorInstanceInfo&& from) noexcept
+    : ActorInstanceInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline ActorInstanceInfo& operator=(const ActorInstanceInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ActorInstanceInfo& operator=(ActorInstanceInfo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ActorInstanceInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ActorInstanceInfo* internal_default_instance() {
+    return reinterpret_cast<const ActorInstanceInfo*>(
+               &_ActorInstanceInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  void Swap(ActorInstanceInfo* other);
+  friend void swap(ActorInstanceInfo& a, ActorInstanceInfo& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ActorInstanceInfo* New() const final {
+    return CreateMaybeMessage<ActorInstanceInfo>(nullptr);
+  }
+
+  ActorInstanceInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ActorInstanceInfo>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ActorInstanceInfo& from);
+  void MergeFrom(const ActorInstanceInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ActorInstanceInfo* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rpc.ActorInstanceInfo";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_ActorOperation_2eproto);
+    return ::descriptor_table_ActorOperation_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .rpc.Vector3D position = 2;
+  bool has_position() const;
+  void clear_position();
+  static const int kPositionFieldNumber = 2;
+  const ::rpc::Vector3D& position() const;
+  ::rpc::Vector3D* release_position();
+  ::rpc::Vector3D* mutable_position();
+  void set_allocated_position(::rpc::Vector3D* position);
+
+  // .rpc.Vector3D velocity = 3;
+  bool has_velocity() const;
+  void clear_velocity();
+  static const int kVelocityFieldNumber = 3;
+  const ::rpc::Vector3D& velocity() const;
+  ::rpc::Vector3D* release_velocity();
+  ::rpc::Vector3D* mutable_velocity();
+  void set_allocated_velocity(::rpc::Vector3D* velocity);
+
+  // .rpc.Vector3D acceleration = 4;
+  bool has_acceleration() const;
+  void clear_acceleration();
+  static const int kAccelerationFieldNumber = 4;
+  const ::rpc::Vector3D& acceleration() const;
+  ::rpc::Vector3D* release_acceleration();
+  ::rpc::Vector3D* mutable_acceleration();
+  void set_allocated_acceleration(::rpc::Vector3D* acceleration);
+
+  // .rpc.Vector3D steerCohesion = 5;
+  bool has_steercohesion() const;
+  void clear_steercohesion();
+  static const int kSteerCohesionFieldNumber = 5;
+  const ::rpc::Vector3D& steercohesion() const;
+  ::rpc::Vector3D* release_steercohesion();
+  ::rpc::Vector3D* mutable_steercohesion();
+  void set_allocated_steercohesion(::rpc::Vector3D* steercohesion);
+
+  // .rpc.Vector3D steerSeparation = 6;
+  bool has_steerseparation() const;
+  void clear_steerseparation();
+  static const int kSteerSeparationFieldNumber = 6;
+  const ::rpc::Vector3D& steerseparation() const;
+  ::rpc::Vector3D* release_steerseparation();
+  ::rpc::Vector3D* mutable_steerseparation();
+  void set_allocated_steerseparation(::rpc::Vector3D* steerseparation);
+
+  // .rpc.Vector3D steerAlignmen = 7;
+  bool has_steeralignmen() const;
+  void clear_steeralignmen();
+  static const int kSteerAlignmenFieldNumber = 7;
+  const ::rpc::Vector3D& steeralignmen() const;
+  ::rpc::Vector3D* release_steeralignmen();
+  ::rpc::Vector3D* mutable_steeralignmen();
+  void set_allocated_steeralignmen(::rpc::Vector3D* steeralignmen);
+
+  // int32 instanceIndex = 1;
+  void clear_instanceindex();
+  static const int kInstanceIndexFieldNumber = 1;
+  ::PROTOBUF_NAMESPACE_ID::int32 instanceindex() const;
+  void set_instanceindex(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // int32 steerCohesionCnt = 8;
+  void clear_steercohesioncnt();
+  static const int kSteerCohesionCntFieldNumber = 8;
+  ::PROTOBUF_NAMESPACE_ID::int32 steercohesioncnt() const;
+  void set_steercohesioncnt(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // int32 steerSeparationCnt = 9;
+  void clear_steerseparationcnt();
+  static const int kSteerSeparationCntFieldNumber = 9;
+  ::PROTOBUF_NAMESPACE_ID::int32 steerseparationcnt() const;
+  void set_steerseparationcnt(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // int32 steerAlignmentCnt = 10;
+  void clear_steeralignmentcnt();
+  static const int kSteerAlignmentCntFieldNumber = 10;
+  ::PROTOBUF_NAMESPACE_ID::int32 steeralignmentcnt() const;
+  void set_steeralignmentcnt(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:rpc.ActorInstanceInfo)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::rpc::Vector3D* position_;
+  ::rpc::Vector3D* velocity_;
+  ::rpc::Vector3D* acceleration_;
+  ::rpc::Vector3D* steercohesion_;
+  ::rpc::Vector3D* steerseparation_;
+  ::rpc::Vector3D* steeralignmen_;
+  ::PROTOBUF_NAMESPACE_ID::int32 instanceindex_;
+  ::PROTOBUF_NAMESPACE_ID::int32 steercohesioncnt_;
+  ::PROTOBUF_NAMESPACE_ID::int32 steerseparationcnt_;
+  ::PROTOBUF_NAMESPACE_ID::int32 steeralignmentcnt_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_ActorOperation_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ActorEnvironmentInfo :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rpc.ActorEnvironmentInfo) */ {
+ public:
+  ActorEnvironmentInfo();
+  virtual ~ActorEnvironmentInfo();
+
+  ActorEnvironmentInfo(const ActorEnvironmentInfo& from);
+  ActorEnvironmentInfo(ActorEnvironmentInfo&& from) noexcept
+    : ActorEnvironmentInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline ActorEnvironmentInfo& operator=(const ActorEnvironmentInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ActorEnvironmentInfo& operator=(ActorEnvironmentInfo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ActorEnvironmentInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ActorEnvironmentInfo* internal_default_instance() {
+    return reinterpret_cast<const ActorEnvironmentInfo*>(
+               &_ActorEnvironmentInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  void Swap(ActorEnvironmentInfo* other);
+  friend void swap(ActorEnvironmentInfo& a, ActorEnvironmentInfo& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ActorEnvironmentInfo* New() const final {
+    return CreateMaybeMessage<ActorEnvironmentInfo>(nullptr);
+  }
+
+  ActorEnvironmentInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ActorEnvironmentInfo>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ActorEnvironmentInfo& from);
+  void MergeFrom(const ActorEnvironmentInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ActorEnvironmentInfo* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rpc.ActorEnvironmentInfo";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_ActorOperation_2eproto);
+    return ::descriptor_table_ActorOperation_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 instanceCount = 1;
+  void clear_instancecount();
+  static const int kInstanceCountFieldNumber = 1;
+  ::PROTOBUF_NAMESPACE_ID::int32 instancecount() const;
+  void set_instancecount(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // float radiusCohesion = 2;
+  void clear_radiuscohesion();
+  static const int kRadiusCohesionFieldNumber = 2;
+  float radiuscohesion() const;
+  void set_radiuscohesion(float value);
+
+  // float radiusSeparation = 3;
+  void clear_radiusseparation();
+  static const int kRadiusSeparationFieldNumber = 3;
+  float radiusseparation() const;
+  void set_radiusseparation(float value);
+
+  // float radiusAlignment = 4;
+  void clear_radiusalignment();
+  static const int kRadiusAlignmentFieldNumber = 4;
+  float radiusalignment() const;
+  void set_radiusalignment(float value);
+
+  // float mapRangeX = 5;
+  void clear_maprangex();
+  static const int kMapRangeXFieldNumber = 5;
+  float maprangex() const;
+  void set_maprangex(float value);
+
+  // float mapRangeY = 6;
+  void clear_maprangey();
+  static const int kMapRangeYFieldNumber = 6;
+  float maprangey() const;
+  void set_maprangey(float value);
+
+  // float mapRangeZ = 7;
+  void clear_maprangez();
+  static const int kMapRangeZFieldNumber = 7;
+  float maprangez() const;
+  void set_maprangez(float value);
+
+  // float kCohesion = 8;
+  void clear_kcohesion();
+  static const int kKCohesionFieldNumber = 8;
+  float kcohesion() const;
+  void set_kcohesion(float value);
+
+  // float kSeparation = 9;
+  void clear_kseparation();
+  static const int kKSeparationFieldNumber = 9;
+  float kseparation() const;
+  void set_kseparation(float value);
+
+  // float kAlignment = 10;
+  void clear_kalignment();
+  static const int kKAlignmentFieldNumber = 10;
+  float kalignment() const;
+  void set_kalignment(float value);
+
+  // float maxAcceleration = 11;
+  void clear_maxacceleration();
+  static const int kMaxAccelerationFieldNumber = 11;
+  float maxacceleration() const;
+  void set_maxacceleration(float value);
+
+  // float maxVelocity = 12;
+  void clear_maxvelocity();
+  static const int kMaxVelocityFieldNumber = 12;
+  float maxvelocity() const;
+  void set_maxvelocity(float value);
+
+  // int32 calculationsPerThread = 13;
+  void clear_calculationsperthread();
+  static const int kCalculationsPerThreadFieldNumber = 13;
+  ::PROTOBUF_NAMESPACE_ID::int32 calculationsperthread() const;
+  void set_calculationsperthread(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // float DeltaTime = 14;
+  void clear_deltatime();
+  static const int kDeltaTimeFieldNumber = 14;
+  float deltatime() const;
+  void set_deltatime(float value);
+
+  // @@protoc_insertion_point(class_scope:rpc.ActorEnvironmentInfo)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::int32 instancecount_;
+  float radiuscohesion_;
+  float radiusseparation_;
+  float radiusalignment_;
+  float maprangex_;
+  float maprangey_;
+  float maprangez_;
+  float kcohesion_;
+  float kseparation_;
+  float kalignment_;
+  float maxacceleration_;
+  float maxvelocity_;
+  ::PROTOBUF_NAMESPACE_ID::int32 calculationsperthread_;
+  float deltatime_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_ActorOperation_2eproto;
 };
@@ -907,13 +1351,13 @@ inline void Vector3D::clear_x() {
   x_ = 0;
 }
 inline float Vector3D::x() const {
-  // @@protoc_insertion_point(field_get:Vector3D.x)
+  // @@protoc_insertion_point(field_get:rpc.Vector3D.x)
   return x_;
 }
 inline void Vector3D::set_x(float value) {
   
   x_ = value;
-  // @@protoc_insertion_point(field_set:Vector3D.x)
+  // @@protoc_insertion_point(field_set:rpc.Vector3D.x)
 }
 
 // float y = 2;
@@ -921,13 +1365,13 @@ inline void Vector3D::clear_y() {
   y_ = 0;
 }
 inline float Vector3D::y() const {
-  // @@protoc_insertion_point(field_get:Vector3D.y)
+  // @@protoc_insertion_point(field_get:rpc.Vector3D.y)
   return y_;
 }
 inline void Vector3D::set_y(float value) {
   
   y_ = value;
-  // @@protoc_insertion_point(field_set:Vector3D.y)
+  // @@protoc_insertion_point(field_set:rpc.Vector3D.y)
 }
 
 // float z = 3;
@@ -935,38 +1379,20 @@ inline void Vector3D::clear_z() {
   z_ = 0;
 }
 inline float Vector3D::z() const {
-  // @@protoc_insertion_point(field_get:Vector3D.z)
+  // @@protoc_insertion_point(field_get:rpc.Vector3D.z)
   return z_;
 }
 inline void Vector3D::set_z(float value) {
   
   z_ = value;
-  // @@protoc_insertion_point(field_set:Vector3D.z)
-}
-
-// -------------------------------------------------------------------
-
-// InstanceIndex
-
-// int32 index = 1;
-inline void InstanceIndex::clear_index() {
-  index_ = 0;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 InstanceIndex::index() const {
-  // @@protoc_insertion_point(field_get:InstanceIndex.index)
-  return index_;
-}
-inline void InstanceIndex::set_index(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
-  index_ = value;
-  // @@protoc_insertion_point(field_set:InstanceIndex.index)
+  // @@protoc_insertion_point(field_set:rpc.Vector3D.z)
 }
 
 // -------------------------------------------------------------------
 
 // Transform
 
-// .Vector3D position = 1;
+// .rpc.Vector3D position = 1;
 inline bool Transform::has_position() const {
   return this != internal_default_instance() && position_ != nullptr;
 }
@@ -976,29 +1402,29 @@ inline void Transform::clear_position() {
   }
   position_ = nullptr;
 }
-inline const ::Vector3D& Transform::position() const {
-  const ::Vector3D* p = position_;
-  // @@protoc_insertion_point(field_get:Transform.position)
-  return p != nullptr ? *p : *reinterpret_cast<const ::Vector3D*>(
-      &::_Vector3D_default_instance_);
+inline const ::rpc::Vector3D& Transform::position() const {
+  const ::rpc::Vector3D* p = position_;
+  // @@protoc_insertion_point(field_get:rpc.Transform.position)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Vector3D*>(
+      &::rpc::_Vector3D_default_instance_);
 }
-inline ::Vector3D* Transform::release_position() {
-  // @@protoc_insertion_point(field_release:Transform.position)
+inline ::rpc::Vector3D* Transform::release_position() {
+  // @@protoc_insertion_point(field_release:rpc.Transform.position)
   
-  ::Vector3D* temp = position_;
+  ::rpc::Vector3D* temp = position_;
   position_ = nullptr;
   return temp;
 }
-inline ::Vector3D* Transform::mutable_position() {
+inline ::rpc::Vector3D* Transform::mutable_position() {
   
   if (position_ == nullptr) {
-    auto* p = CreateMaybeMessage<::Vector3D>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::rpc::Vector3D>(GetArenaNoVirtual());
     position_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:Transform.position)
+  // @@protoc_insertion_point(field_mutable:rpc.Transform.position)
   return position_;
 }
-inline void Transform::set_allocated_position(::Vector3D* position) {
+inline void Transform::set_allocated_position(::rpc::Vector3D* position) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
     delete position_;
@@ -1014,10 +1440,10 @@ inline void Transform::set_allocated_position(::Vector3D* position) {
     
   }
   position_ = position;
-  // @@protoc_insertion_point(field_set_allocated:Transform.position)
+  // @@protoc_insertion_point(field_set_allocated:rpc.Transform.position)
 }
 
-// .Vector3D rotation = 2;
+// .rpc.Vector3D rotation = 2;
 inline bool Transform::has_rotation() const {
   return this != internal_default_instance() && rotation_ != nullptr;
 }
@@ -1027,29 +1453,29 @@ inline void Transform::clear_rotation() {
   }
   rotation_ = nullptr;
 }
-inline const ::Vector3D& Transform::rotation() const {
-  const ::Vector3D* p = rotation_;
-  // @@protoc_insertion_point(field_get:Transform.rotation)
-  return p != nullptr ? *p : *reinterpret_cast<const ::Vector3D*>(
-      &::_Vector3D_default_instance_);
+inline const ::rpc::Vector3D& Transform::rotation() const {
+  const ::rpc::Vector3D* p = rotation_;
+  // @@protoc_insertion_point(field_get:rpc.Transform.rotation)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Vector3D*>(
+      &::rpc::_Vector3D_default_instance_);
 }
-inline ::Vector3D* Transform::release_rotation() {
-  // @@protoc_insertion_point(field_release:Transform.rotation)
+inline ::rpc::Vector3D* Transform::release_rotation() {
+  // @@protoc_insertion_point(field_release:rpc.Transform.rotation)
   
-  ::Vector3D* temp = rotation_;
+  ::rpc::Vector3D* temp = rotation_;
   rotation_ = nullptr;
   return temp;
 }
-inline ::Vector3D* Transform::mutable_rotation() {
+inline ::rpc::Vector3D* Transform::mutable_rotation() {
   
   if (rotation_ == nullptr) {
-    auto* p = CreateMaybeMessage<::Vector3D>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::rpc::Vector3D>(GetArenaNoVirtual());
     rotation_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:Transform.rotation)
+  // @@protoc_insertion_point(field_mutable:rpc.Transform.rotation)
   return rotation_;
 }
-inline void Transform::set_allocated_rotation(::Vector3D* rotation) {
+inline void Transform::set_allocated_rotation(::rpc::Vector3D* rotation) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
     delete rotation_;
@@ -1065,10 +1491,10 @@ inline void Transform::set_allocated_rotation(::Vector3D* rotation) {
     
   }
   rotation_ = rotation;
-  // @@protoc_insertion_point(field_set_allocated:Transform.rotation)
+  // @@protoc_insertion_point(field_set_allocated:rpc.Transform.rotation)
 }
 
-// .Vector3D scale = 3;
+// .rpc.Vector3D scale = 3;
 inline bool Transform::has_scale() const {
   return this != internal_default_instance() && scale_ != nullptr;
 }
@@ -1078,29 +1504,29 @@ inline void Transform::clear_scale() {
   }
   scale_ = nullptr;
 }
-inline const ::Vector3D& Transform::scale() const {
-  const ::Vector3D* p = scale_;
-  // @@protoc_insertion_point(field_get:Transform.scale)
-  return p != nullptr ? *p : *reinterpret_cast<const ::Vector3D*>(
-      &::_Vector3D_default_instance_);
+inline const ::rpc::Vector3D& Transform::scale() const {
+  const ::rpc::Vector3D* p = scale_;
+  // @@protoc_insertion_point(field_get:rpc.Transform.scale)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Vector3D*>(
+      &::rpc::_Vector3D_default_instance_);
 }
-inline ::Vector3D* Transform::release_scale() {
-  // @@protoc_insertion_point(field_release:Transform.scale)
+inline ::rpc::Vector3D* Transform::release_scale() {
+  // @@protoc_insertion_point(field_release:rpc.Transform.scale)
   
-  ::Vector3D* temp = scale_;
+  ::rpc::Vector3D* temp = scale_;
   scale_ = nullptr;
   return temp;
 }
-inline ::Vector3D* Transform::mutable_scale() {
+inline ::rpc::Vector3D* Transform::mutable_scale() {
   
   if (scale_ == nullptr) {
-    auto* p = CreateMaybeMessage<::Vector3D>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::rpc::Vector3D>(GetArenaNoVirtual());
     scale_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:Transform.scale)
+  // @@protoc_insertion_point(field_mutable:rpc.Transform.scale)
   return scale_;
 }
-inline void Transform::set_allocated_scale(::Vector3D* scale) {
+inline void Transform::set_allocated_scale(::rpc::Vector3D* scale) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
     delete scale_;
@@ -1116,60 +1542,78 @@ inline void Transform::set_allocated_scale(::Vector3D* scale) {
     
   }
   scale_ = scale;
-  // @@protoc_insertion_point(field_set_allocated:Transform.scale)
+  // @@protoc_insertion_point(field_set_allocated:rpc.Transform.scale)
 }
 
 // -------------------------------------------------------------------
 
-// InstanceTransform
+// ActorInstanceIndex
+
+// int32 id = 1;
+inline void ActorInstanceIndex::clear_id() {
+  id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActorInstanceIndex::id() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceIndex.id)
+  return id_;
+}
+inline void ActorInstanceIndex::set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  id_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorInstanceIndex.id)
+}
+
+// -------------------------------------------------------------------
+
+// ActorInstanceTransform
 
 // int32 index = 1;
-inline void InstanceTransform::clear_index() {
+inline void ActorInstanceTransform::clear_index() {
   index_ = 0;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 InstanceTransform::index() const {
-  // @@protoc_insertion_point(field_get:InstanceTransform.index)
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActorInstanceTransform::index() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceTransform.index)
   return index_;
 }
-inline void InstanceTransform::set_index(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void ActorInstanceTransform::set_index(::PROTOBUF_NAMESPACE_ID::int32 value) {
   
   index_ = value;
-  // @@protoc_insertion_point(field_set:InstanceTransform.index)
+  // @@protoc_insertion_point(field_set:rpc.ActorInstanceTransform.index)
 }
 
-// .Transform transform = 2;
-inline bool InstanceTransform::has_transform() const {
+// .rpc.Transform transform = 2;
+inline bool ActorInstanceTransform::has_transform() const {
   return this != internal_default_instance() && transform_ != nullptr;
 }
-inline void InstanceTransform::clear_transform() {
+inline void ActorInstanceTransform::clear_transform() {
   if (GetArenaNoVirtual() == nullptr && transform_ != nullptr) {
     delete transform_;
   }
   transform_ = nullptr;
 }
-inline const ::Transform& InstanceTransform::transform() const {
-  const ::Transform* p = transform_;
-  // @@protoc_insertion_point(field_get:InstanceTransform.transform)
-  return p != nullptr ? *p : *reinterpret_cast<const ::Transform*>(
-      &::_Transform_default_instance_);
+inline const ::rpc::Transform& ActorInstanceTransform::transform() const {
+  const ::rpc::Transform* p = transform_;
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceTransform.transform)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Transform*>(
+      &::rpc::_Transform_default_instance_);
 }
-inline ::Transform* InstanceTransform::release_transform() {
-  // @@protoc_insertion_point(field_release:InstanceTransform.transform)
+inline ::rpc::Transform* ActorInstanceTransform::release_transform() {
+  // @@protoc_insertion_point(field_release:rpc.ActorInstanceTransform.transform)
   
-  ::Transform* temp = transform_;
+  ::rpc::Transform* temp = transform_;
   transform_ = nullptr;
   return temp;
 }
-inline ::Transform* InstanceTransform::mutable_transform() {
+inline ::rpc::Transform* ActorInstanceTransform::mutable_transform() {
   
   if (transform_ == nullptr) {
-    auto* p = CreateMaybeMessage<::Transform>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::rpc::Transform>(GetArenaNoVirtual());
     transform_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:InstanceTransform.transform)
+  // @@protoc_insertion_point(field_mutable:rpc.ActorInstanceTransform.transform)
   return transform_;
 }
-inline void InstanceTransform::set_allocated_transform(::Transform* transform) {
+inline void ActorInstanceTransform::set_allocated_transform(::rpc::Transform* transform) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
     delete transform_;
@@ -1185,60 +1629,60 @@ inline void InstanceTransform::set_allocated_transform(::Transform* transform) {
     
   }
   transform_ = transform;
-  // @@protoc_insertion_point(field_set_allocated:InstanceTransform.transform)
+  // @@protoc_insertion_point(field_set_allocated:rpc.ActorInstanceTransform.transform)
 }
 
 // -------------------------------------------------------------------
 
-// InstanceForce
+// ActorInstanceForce
 
 // int32 index = 1;
-inline void InstanceForce::clear_index() {
+inline void ActorInstanceForce::clear_index() {
   index_ = 0;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 InstanceForce::index() const {
-  // @@protoc_insertion_point(field_get:InstanceForce.index)
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActorInstanceForce::index() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceForce.index)
   return index_;
 }
-inline void InstanceForce::set_index(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void ActorInstanceForce::set_index(::PROTOBUF_NAMESPACE_ID::int32 value) {
   
   index_ = value;
-  // @@protoc_insertion_point(field_set:InstanceForce.index)
+  // @@protoc_insertion_point(field_set:rpc.ActorInstanceForce.index)
 }
 
-// .Vector3D force = 2;
-inline bool InstanceForce::has_force() const {
+// .rpc.Vector3D force = 2;
+inline bool ActorInstanceForce::has_force() const {
   return this != internal_default_instance() && force_ != nullptr;
 }
-inline void InstanceForce::clear_force() {
+inline void ActorInstanceForce::clear_force() {
   if (GetArenaNoVirtual() == nullptr && force_ != nullptr) {
     delete force_;
   }
   force_ = nullptr;
 }
-inline const ::Vector3D& InstanceForce::force() const {
-  const ::Vector3D* p = force_;
-  // @@protoc_insertion_point(field_get:InstanceForce.force)
-  return p != nullptr ? *p : *reinterpret_cast<const ::Vector3D*>(
-      &::_Vector3D_default_instance_);
+inline const ::rpc::Vector3D& ActorInstanceForce::force() const {
+  const ::rpc::Vector3D* p = force_;
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceForce.force)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Vector3D*>(
+      &::rpc::_Vector3D_default_instance_);
 }
-inline ::Vector3D* InstanceForce::release_force() {
-  // @@protoc_insertion_point(field_release:InstanceForce.force)
+inline ::rpc::Vector3D* ActorInstanceForce::release_force() {
+  // @@protoc_insertion_point(field_release:rpc.ActorInstanceForce.force)
   
-  ::Vector3D* temp = force_;
+  ::rpc::Vector3D* temp = force_;
   force_ = nullptr;
   return temp;
 }
-inline ::Vector3D* InstanceForce::mutable_force() {
+inline ::rpc::Vector3D* ActorInstanceForce::mutable_force() {
   
   if (force_ == nullptr) {
-    auto* p = CreateMaybeMessage<::Vector3D>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::rpc::Vector3D>(GetArenaNoVirtual());
     force_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:InstanceForce.force)
+  // @@protoc_insertion_point(field_mutable:rpc.ActorInstanceForce.force)
   return force_;
 }
-inline void InstanceForce::set_allocated_force(::Vector3D* force) {
+inline void ActorInstanceForce::set_allocated_force(::rpc::Vector3D* force) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
     delete force_;
@@ -1254,7 +1698,573 @@ inline void InstanceForce::set_allocated_force(::Vector3D* force) {
     
   }
   force_ = force;
-  // @@protoc_insertion_point(field_set_allocated:InstanceForce.force)
+  // @@protoc_insertion_point(field_set_allocated:rpc.ActorInstanceForce.force)
+}
+
+// -------------------------------------------------------------------
+
+// ActorInstanceInfo
+
+// int32 instanceIndex = 1;
+inline void ActorInstanceInfo::clear_instanceindex() {
+  instanceindex_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActorInstanceInfo::instanceindex() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceInfo.instanceIndex)
+  return instanceindex_;
+}
+inline void ActorInstanceInfo::set_instanceindex(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  instanceindex_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorInstanceInfo.instanceIndex)
+}
+
+// .rpc.Vector3D position = 2;
+inline bool ActorInstanceInfo::has_position() const {
+  return this != internal_default_instance() && position_ != nullptr;
+}
+inline void ActorInstanceInfo::clear_position() {
+  if (GetArenaNoVirtual() == nullptr && position_ != nullptr) {
+    delete position_;
+  }
+  position_ = nullptr;
+}
+inline const ::rpc::Vector3D& ActorInstanceInfo::position() const {
+  const ::rpc::Vector3D* p = position_;
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceInfo.position)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Vector3D*>(
+      &::rpc::_Vector3D_default_instance_);
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::release_position() {
+  // @@protoc_insertion_point(field_release:rpc.ActorInstanceInfo.position)
+  
+  ::rpc::Vector3D* temp = position_;
+  position_ = nullptr;
+  return temp;
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::mutable_position() {
+  
+  if (position_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rpc::Vector3D>(GetArenaNoVirtual());
+    position_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:rpc.ActorInstanceInfo.position)
+  return position_;
+}
+inline void ActorInstanceInfo::set_allocated_position(::rpc::Vector3D* position) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete position_;
+  }
+  if (position) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      position = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, position, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  position_ = position;
+  // @@protoc_insertion_point(field_set_allocated:rpc.ActorInstanceInfo.position)
+}
+
+// .rpc.Vector3D velocity = 3;
+inline bool ActorInstanceInfo::has_velocity() const {
+  return this != internal_default_instance() && velocity_ != nullptr;
+}
+inline void ActorInstanceInfo::clear_velocity() {
+  if (GetArenaNoVirtual() == nullptr && velocity_ != nullptr) {
+    delete velocity_;
+  }
+  velocity_ = nullptr;
+}
+inline const ::rpc::Vector3D& ActorInstanceInfo::velocity() const {
+  const ::rpc::Vector3D* p = velocity_;
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceInfo.velocity)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Vector3D*>(
+      &::rpc::_Vector3D_default_instance_);
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::release_velocity() {
+  // @@protoc_insertion_point(field_release:rpc.ActorInstanceInfo.velocity)
+  
+  ::rpc::Vector3D* temp = velocity_;
+  velocity_ = nullptr;
+  return temp;
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::mutable_velocity() {
+  
+  if (velocity_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rpc::Vector3D>(GetArenaNoVirtual());
+    velocity_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:rpc.ActorInstanceInfo.velocity)
+  return velocity_;
+}
+inline void ActorInstanceInfo::set_allocated_velocity(::rpc::Vector3D* velocity) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete velocity_;
+  }
+  if (velocity) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      velocity = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, velocity, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  velocity_ = velocity;
+  // @@protoc_insertion_point(field_set_allocated:rpc.ActorInstanceInfo.velocity)
+}
+
+// .rpc.Vector3D acceleration = 4;
+inline bool ActorInstanceInfo::has_acceleration() const {
+  return this != internal_default_instance() && acceleration_ != nullptr;
+}
+inline void ActorInstanceInfo::clear_acceleration() {
+  if (GetArenaNoVirtual() == nullptr && acceleration_ != nullptr) {
+    delete acceleration_;
+  }
+  acceleration_ = nullptr;
+}
+inline const ::rpc::Vector3D& ActorInstanceInfo::acceleration() const {
+  const ::rpc::Vector3D* p = acceleration_;
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceInfo.acceleration)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Vector3D*>(
+      &::rpc::_Vector3D_default_instance_);
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::release_acceleration() {
+  // @@protoc_insertion_point(field_release:rpc.ActorInstanceInfo.acceleration)
+  
+  ::rpc::Vector3D* temp = acceleration_;
+  acceleration_ = nullptr;
+  return temp;
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::mutable_acceleration() {
+  
+  if (acceleration_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rpc::Vector3D>(GetArenaNoVirtual());
+    acceleration_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:rpc.ActorInstanceInfo.acceleration)
+  return acceleration_;
+}
+inline void ActorInstanceInfo::set_allocated_acceleration(::rpc::Vector3D* acceleration) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete acceleration_;
+  }
+  if (acceleration) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      acceleration = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, acceleration, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  acceleration_ = acceleration;
+  // @@protoc_insertion_point(field_set_allocated:rpc.ActorInstanceInfo.acceleration)
+}
+
+// .rpc.Vector3D steerCohesion = 5;
+inline bool ActorInstanceInfo::has_steercohesion() const {
+  return this != internal_default_instance() && steercohesion_ != nullptr;
+}
+inline void ActorInstanceInfo::clear_steercohesion() {
+  if (GetArenaNoVirtual() == nullptr && steercohesion_ != nullptr) {
+    delete steercohesion_;
+  }
+  steercohesion_ = nullptr;
+}
+inline const ::rpc::Vector3D& ActorInstanceInfo::steercohesion() const {
+  const ::rpc::Vector3D* p = steercohesion_;
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceInfo.steerCohesion)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Vector3D*>(
+      &::rpc::_Vector3D_default_instance_);
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::release_steercohesion() {
+  // @@protoc_insertion_point(field_release:rpc.ActorInstanceInfo.steerCohesion)
+  
+  ::rpc::Vector3D* temp = steercohesion_;
+  steercohesion_ = nullptr;
+  return temp;
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::mutable_steercohesion() {
+  
+  if (steercohesion_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rpc::Vector3D>(GetArenaNoVirtual());
+    steercohesion_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:rpc.ActorInstanceInfo.steerCohesion)
+  return steercohesion_;
+}
+inline void ActorInstanceInfo::set_allocated_steercohesion(::rpc::Vector3D* steercohesion) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete steercohesion_;
+  }
+  if (steercohesion) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      steercohesion = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, steercohesion, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  steercohesion_ = steercohesion;
+  // @@protoc_insertion_point(field_set_allocated:rpc.ActorInstanceInfo.steerCohesion)
+}
+
+// .rpc.Vector3D steerSeparation = 6;
+inline bool ActorInstanceInfo::has_steerseparation() const {
+  return this != internal_default_instance() && steerseparation_ != nullptr;
+}
+inline void ActorInstanceInfo::clear_steerseparation() {
+  if (GetArenaNoVirtual() == nullptr && steerseparation_ != nullptr) {
+    delete steerseparation_;
+  }
+  steerseparation_ = nullptr;
+}
+inline const ::rpc::Vector3D& ActorInstanceInfo::steerseparation() const {
+  const ::rpc::Vector3D* p = steerseparation_;
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceInfo.steerSeparation)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Vector3D*>(
+      &::rpc::_Vector3D_default_instance_);
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::release_steerseparation() {
+  // @@protoc_insertion_point(field_release:rpc.ActorInstanceInfo.steerSeparation)
+  
+  ::rpc::Vector3D* temp = steerseparation_;
+  steerseparation_ = nullptr;
+  return temp;
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::mutable_steerseparation() {
+  
+  if (steerseparation_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rpc::Vector3D>(GetArenaNoVirtual());
+    steerseparation_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:rpc.ActorInstanceInfo.steerSeparation)
+  return steerseparation_;
+}
+inline void ActorInstanceInfo::set_allocated_steerseparation(::rpc::Vector3D* steerseparation) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete steerseparation_;
+  }
+  if (steerseparation) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      steerseparation = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, steerseparation, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  steerseparation_ = steerseparation;
+  // @@protoc_insertion_point(field_set_allocated:rpc.ActorInstanceInfo.steerSeparation)
+}
+
+// .rpc.Vector3D steerAlignmen = 7;
+inline bool ActorInstanceInfo::has_steeralignmen() const {
+  return this != internal_default_instance() && steeralignmen_ != nullptr;
+}
+inline void ActorInstanceInfo::clear_steeralignmen() {
+  if (GetArenaNoVirtual() == nullptr && steeralignmen_ != nullptr) {
+    delete steeralignmen_;
+  }
+  steeralignmen_ = nullptr;
+}
+inline const ::rpc::Vector3D& ActorInstanceInfo::steeralignmen() const {
+  const ::rpc::Vector3D* p = steeralignmen_;
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceInfo.steerAlignmen)
+  return p != nullptr ? *p : *reinterpret_cast<const ::rpc::Vector3D*>(
+      &::rpc::_Vector3D_default_instance_);
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::release_steeralignmen() {
+  // @@protoc_insertion_point(field_release:rpc.ActorInstanceInfo.steerAlignmen)
+  
+  ::rpc::Vector3D* temp = steeralignmen_;
+  steeralignmen_ = nullptr;
+  return temp;
+}
+inline ::rpc::Vector3D* ActorInstanceInfo::mutable_steeralignmen() {
+  
+  if (steeralignmen_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rpc::Vector3D>(GetArenaNoVirtual());
+    steeralignmen_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:rpc.ActorInstanceInfo.steerAlignmen)
+  return steeralignmen_;
+}
+inline void ActorInstanceInfo::set_allocated_steeralignmen(::rpc::Vector3D* steeralignmen) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete steeralignmen_;
+  }
+  if (steeralignmen) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      steeralignmen = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, steeralignmen, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  steeralignmen_ = steeralignmen;
+  // @@protoc_insertion_point(field_set_allocated:rpc.ActorInstanceInfo.steerAlignmen)
+}
+
+// int32 steerCohesionCnt = 8;
+inline void ActorInstanceInfo::clear_steercohesioncnt() {
+  steercohesioncnt_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActorInstanceInfo::steercohesioncnt() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceInfo.steerCohesionCnt)
+  return steercohesioncnt_;
+}
+inline void ActorInstanceInfo::set_steercohesioncnt(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  steercohesioncnt_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorInstanceInfo.steerCohesionCnt)
+}
+
+// int32 steerSeparationCnt = 9;
+inline void ActorInstanceInfo::clear_steerseparationcnt() {
+  steerseparationcnt_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActorInstanceInfo::steerseparationcnt() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceInfo.steerSeparationCnt)
+  return steerseparationcnt_;
+}
+inline void ActorInstanceInfo::set_steerseparationcnt(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  steerseparationcnt_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorInstanceInfo.steerSeparationCnt)
+}
+
+// int32 steerAlignmentCnt = 10;
+inline void ActorInstanceInfo::clear_steeralignmentcnt() {
+  steeralignmentcnt_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActorInstanceInfo::steeralignmentcnt() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorInstanceInfo.steerAlignmentCnt)
+  return steeralignmentcnt_;
+}
+inline void ActorInstanceInfo::set_steeralignmentcnt(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  steeralignmentcnt_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorInstanceInfo.steerAlignmentCnt)
+}
+
+// -------------------------------------------------------------------
+
+// ActorEnvironmentInfo
+
+// int32 instanceCount = 1;
+inline void ActorEnvironmentInfo::clear_instancecount() {
+  instancecount_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActorEnvironmentInfo::instancecount() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.instanceCount)
+  return instancecount_;
+}
+inline void ActorEnvironmentInfo::set_instancecount(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  instancecount_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.instanceCount)
+}
+
+// float radiusCohesion = 2;
+inline void ActorEnvironmentInfo::clear_radiuscohesion() {
+  radiuscohesion_ = 0;
+}
+inline float ActorEnvironmentInfo::radiuscohesion() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.radiusCohesion)
+  return radiuscohesion_;
+}
+inline void ActorEnvironmentInfo::set_radiuscohesion(float value) {
+  
+  radiuscohesion_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.radiusCohesion)
+}
+
+// float radiusSeparation = 3;
+inline void ActorEnvironmentInfo::clear_radiusseparation() {
+  radiusseparation_ = 0;
+}
+inline float ActorEnvironmentInfo::radiusseparation() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.radiusSeparation)
+  return radiusseparation_;
+}
+inline void ActorEnvironmentInfo::set_radiusseparation(float value) {
+  
+  radiusseparation_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.radiusSeparation)
+}
+
+// float radiusAlignment = 4;
+inline void ActorEnvironmentInfo::clear_radiusalignment() {
+  radiusalignment_ = 0;
+}
+inline float ActorEnvironmentInfo::radiusalignment() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.radiusAlignment)
+  return radiusalignment_;
+}
+inline void ActorEnvironmentInfo::set_radiusalignment(float value) {
+  
+  radiusalignment_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.radiusAlignment)
+}
+
+// float mapRangeX = 5;
+inline void ActorEnvironmentInfo::clear_maprangex() {
+  maprangex_ = 0;
+}
+inline float ActorEnvironmentInfo::maprangex() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.mapRangeX)
+  return maprangex_;
+}
+inline void ActorEnvironmentInfo::set_maprangex(float value) {
+  
+  maprangex_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.mapRangeX)
+}
+
+// float mapRangeY = 6;
+inline void ActorEnvironmentInfo::clear_maprangey() {
+  maprangey_ = 0;
+}
+inline float ActorEnvironmentInfo::maprangey() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.mapRangeY)
+  return maprangey_;
+}
+inline void ActorEnvironmentInfo::set_maprangey(float value) {
+  
+  maprangey_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.mapRangeY)
+}
+
+// float mapRangeZ = 7;
+inline void ActorEnvironmentInfo::clear_maprangez() {
+  maprangez_ = 0;
+}
+inline float ActorEnvironmentInfo::maprangez() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.mapRangeZ)
+  return maprangez_;
+}
+inline void ActorEnvironmentInfo::set_maprangez(float value) {
+  
+  maprangez_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.mapRangeZ)
+}
+
+// float kCohesion = 8;
+inline void ActorEnvironmentInfo::clear_kcohesion() {
+  kcohesion_ = 0;
+}
+inline float ActorEnvironmentInfo::kcohesion() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.kCohesion)
+  return kcohesion_;
+}
+inline void ActorEnvironmentInfo::set_kcohesion(float value) {
+  
+  kcohesion_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.kCohesion)
+}
+
+// float kSeparation = 9;
+inline void ActorEnvironmentInfo::clear_kseparation() {
+  kseparation_ = 0;
+}
+inline float ActorEnvironmentInfo::kseparation() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.kSeparation)
+  return kseparation_;
+}
+inline void ActorEnvironmentInfo::set_kseparation(float value) {
+  
+  kseparation_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.kSeparation)
+}
+
+// float kAlignment = 10;
+inline void ActorEnvironmentInfo::clear_kalignment() {
+  kalignment_ = 0;
+}
+inline float ActorEnvironmentInfo::kalignment() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.kAlignment)
+  return kalignment_;
+}
+inline void ActorEnvironmentInfo::set_kalignment(float value) {
+  
+  kalignment_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.kAlignment)
+}
+
+// float maxAcceleration = 11;
+inline void ActorEnvironmentInfo::clear_maxacceleration() {
+  maxacceleration_ = 0;
+}
+inline float ActorEnvironmentInfo::maxacceleration() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.maxAcceleration)
+  return maxacceleration_;
+}
+inline void ActorEnvironmentInfo::set_maxacceleration(float value) {
+  
+  maxacceleration_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.maxAcceleration)
+}
+
+// float maxVelocity = 12;
+inline void ActorEnvironmentInfo::clear_maxvelocity() {
+  maxvelocity_ = 0;
+}
+inline float ActorEnvironmentInfo::maxvelocity() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.maxVelocity)
+  return maxvelocity_;
+}
+inline void ActorEnvironmentInfo::set_maxvelocity(float value) {
+  
+  maxvelocity_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.maxVelocity)
+}
+
+// int32 calculationsPerThread = 13;
+inline void ActorEnvironmentInfo::clear_calculationsperthread() {
+  calculationsperthread_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActorEnvironmentInfo::calculationsperthread() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.calculationsPerThread)
+  return calculationsperthread_;
+}
+inline void ActorEnvironmentInfo::set_calculationsperthread(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  calculationsperthread_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.calculationsPerThread)
+}
+
+// float DeltaTime = 14;
+inline void ActorEnvironmentInfo::clear_deltatime() {
+  deltatime_ = 0;
+}
+inline float ActorEnvironmentInfo::deltatime() const {
+  // @@protoc_insertion_point(field_get:rpc.ActorEnvironmentInfo.DeltaTime)
+  return deltatime_;
+}
+inline void ActorEnvironmentInfo::set_deltatime(float value) {
+  
+  deltatime_ = value;
+  // @@protoc_insertion_point(field_set:rpc.ActorEnvironmentInfo.DeltaTime)
 }
 
 #ifdef __GNUC__
@@ -1270,9 +2280,14 @@ inline void InstanceForce::set_allocated_force(::Vector3D* force) {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
+}  // namespace rpc
 
 // @@protoc_insertion_point(global_scope)
 

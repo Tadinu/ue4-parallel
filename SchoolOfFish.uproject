@@ -22,6 +22,10 @@
 		{
 			"Name": "RenderDocPlugin",
 			"Enabled": true
+		},
+		{
+			"Name": "InfraworldRuntime",
+			"Enabled": true
 		}
 	]
 }

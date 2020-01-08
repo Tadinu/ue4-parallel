@@ -35,6 +35,22 @@ struct State {
         velocity[1] = vel.Y;
         velocity[2] = vel.Z;
     }
+
+    FVector accel() const {
+        return FVector(acceleration[0], acceleration[1], acceleration[2]);
+    }
+
+    FVector steerCoh() const {
+        return FVector(steerCohesion[0], steerCohesion[1], steerCohesion[2]);
+    }
+
+    FVector steerSepa() const {
+        return FVector(steerSeparation[0], steerSeparation[1], steerSeparation[2]);
+    }
+
+    FVector steerAlign() const {
+        return FVector(steerAlignment[0], steerAlignment[1], steerAlignment[2]);
+    }
 };
 
 class SHADERFISHPLUGIN_API FishShaderProcessing

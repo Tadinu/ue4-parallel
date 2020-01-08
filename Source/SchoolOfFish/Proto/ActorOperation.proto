@@ -1,49 +1,90 @@
 syntax = "proto3";
 
+package rpc;
+
 //Represents an empty message, for RPC calls that don't take any arguments
 message Empty {}
 
 //Represents a three dimensional vector
 message Vector3D
 {
-	float x = 1;
-	float y = 2;
-	float z = 3;
-}
-
-message InstanceIndex
-{
-	int32 index = 1;
+    float x = 1;
+    float y = 2;
+    float z = 3;
 }
 
 //Represents a transform in 3D space
 message Transform
 {
-	Vector3D position = 1;
-	Vector3D rotation = 2;
-	Vector3D scale = 3;
+    Vector3D position = 1;
+    Vector3D rotation = 2;
+    Vector3D scale = 3;
 }
 
-message InstanceTransform
+message ActorInstanceIndex
 {
-	int32 index = 1;
-	Transform transform = 2;
+    int32 id = 1;
 }
 
-message InstanceForce
+message ActorInstanceTransform
 {
-	int32 index = 1;
-	Vector3D force = 2;
+    int32 index = 1;
+    Transform transform = 2;
+}
+
+message ActorInstanceForce
+{
+    int32 index = 1;
+    Vector3D force = 2;
+}
+
+
+message ActorInstanceInfo
+{
+    int32 instanceIndex   = 1;
+    Vector3D position     = 2;
+    Vector3D velocity     = 3;
+    Vector3D acceleration = 4;
+
+    Vector3D steerCohesion   = 5 ;
+    Vector3D steerSeparation = 6;
+    Vector3D steerAlignmen   = 7;
+
+    int32 steerCohesionCnt   = 8;
+    int32 steerSeparationCnt = 9;
+    int32 steerAlignmentCnt  = 10;
+}
+
+message ActorEnvironmentInfo
+{
+    int32 instanceCount    = 1;
+    float radiusCohesion   = 2;
+    float radiusSeparation = 3;
+    float radiusAlignment  = 4;
+    float mapRangeX = 5;
+    float mapRangeY = 6;
+    float mapRangeZ = 7;
+    float kCohesion = 8;
+    float kSeparation = 9;
+    float kAlignment  = 10;
+    float maxAcceleration = 11;
+    float maxVelocity     = 12;
+    int32 calculationsPerThread = 13;
+    float DeltaTime = 14;
 }
 
 service ActorOperation
 {
-	//Sets the transform of the actor
-	rpc SetActorTransform (InstanceTransform) returns (Empty) {}
-	
-	//Retrieves the current transform of the actor
-	rpc GetActorTransform (InstanceIndex) returns (Transform) {}
-	
-	//Applies force to the actor
-	rpc ApplyForceToActor (InstanceForce) returns (Empty) {}
+    //Sets the transform of the actor
+    rpc SetActorTransform (ActorInstanceTransform) returns (Empty) {}
+
+    //Retrieves the current transform of the actor
+    rpc GetActorTransform (ActorInstanceInfo) returns (ActorInstanceTransform) {}
+
+    // Inform Server about actor environment Info
+    rpc InformEnvironmentInfo (ActorEnvironmentInfo) returns (Empty) {}
+
+    //Applies force to the actor
+    rpc ApplyForceToActor (ActorInstanceForce) returns (Empty) {}
 }
+

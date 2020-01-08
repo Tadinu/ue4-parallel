@@ -1,17 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#include <memory>
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "FishShaderProcessing.h"
 
-#include <memory>
+#include "GrpcClientAdapter.h"
 #include "FishAgent.generated.h"
 
 #define USING_GPU_COMPUTER_SHADER (0)
 
+class AFlockingGameMode;
 USTRUCT()
 struct SCHOOLOFFISH_API FFishState
 {
@@ -42,12 +45,23 @@ public:
     bool AddForceToFishInstance(int32 InstanceIndex, const FVector& Force);
     FORCEINLINE void SetFishUpdateRequest(bool bInUpdateNeeded) { bUpdateNeeded = bInUpdateNeeded; }
     FORCEINLINE bool IsFishUpdateNeeded() { return bUpdateNeeded; }
+
+    UFUNCTION()
+    void OnFishTransformReturned(UActorOperationRpcClient* RpcClient,
+                                 const FActorInstanceTransform& Response,
+                                 FGrpcStatus Status);
+
 protected:
     void cpuCalculate(TArray<TArray<FFishState>>& agents, float DeltaTime, bool isSingleThread);
 	bool collisionDetected(const FVector &start, const FVector &end, FHitResult &hitResult);
 	void swapFishStatesIndexes();
 
+    void SendToServerEnvironmentInfoToServer(float DeltaTime);
+    void SendToServerRequestFishTransform(int32 FishIndex);
+
 private:
+    FGrpcClientContext context;
+    AFlockingGameMode* GameMode = nullptr;
     FRandomStream randomGen;
 	// ~
 	// General settings to compute flocking behaviour
@@ -93,7 +107,7 @@ private:
     UPROPERTY()
     int32 m_previousStatesIndex;
 
-	// Array of fish states if flocking behaviour calculates on GPU
+    // Array of fish states if flocking behaviour calculates on GPU (by Compute shader or Returned by Compute Server)
     TArray<State> m_gpuFishStates;
 
 	// Single or multithreaded algorithm. CPU only.

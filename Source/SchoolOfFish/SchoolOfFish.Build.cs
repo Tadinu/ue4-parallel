@@ -37,7 +37,7 @@ public class SchoolOfFish : ModuleRules
             return "Headers:\n" + string.Join("\n", HeaderPaths) + "\nLibs:\n" + string.Join("\n", LibraryPaths);
         }
     }
-	
+
     [Conditional("DEBUG")]
     [Conditional("TRACE")]
     private void clog(params object[] objects)
@@ -83,7 +83,7 @@ public class SchoolOfFish : ModuleRules
 
         PlatformLibRoot = Path.Combine(GRPC_LIB_ROOT, Platform.ToString());
         if (Platform == UnrealTargetPlatform.Win64)
-        {            
+        {
             libs.AddRange(FindFilesInDirectory(PlatformLibRoot, "lib"));
         }
         else
@@ -103,15 +103,15 @@ public class SchoolOfFish : ModuleRules
 	public SchoolOfFish(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
+
 		// GRPC --
 		//
 	    PublicDefinitions.Add("GOOGLE_PROTOBUF_NO_RTTI");
         PublicDefinitions.Add("GOOGLE_PROTOBUF_USE_UNALIGNED=0");
         PublicDefinitions.Add("GPR_FORBID_UNREACHABLE_CODE");
-        PublicDefinitions.Add("GRPC_ALLOW_EXCEPTIONS=0");        
+        PublicDefinitions.Add("GRPC_ALLOW_EXCEPTIONS=0");
 
-        //TODO: We do this because in file generated_message_table_driven.h that located in protobuf sources 
+        //TODO: We do this because in file generated_message_table_driven.h that located in protobuf sources
         //TODO: line 174: static_assert(std::is_pod<AuxillaryParseTableField>::value, "");
         //TODO: causes С4647 level 3 warning __is_pod behavior change
         //TODO: UE4 threading some warnings as errors, and we have no chance to suppress this stuff
@@ -131,13 +131,13 @@ public class SchoolOfFish : ModuleRules
         AddEngineThirdPartyPrivateStaticDependencies(Target, "zlib");
 
 		// ----------------------------------------------------------------------------------------------------------------------------
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "RHI", "ShaderFishPlugin" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "RHI", "ShaderFishPlugin", "InfraworldRuntime" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		PrivateDependencyModuleNames.AddRange(new string[] {  "InfraworldRuntime" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-		
+
 		// Uncomment if you are using online features
 		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
 

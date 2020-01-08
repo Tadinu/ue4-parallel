@@ -1,0 +1,17 @@
+*.a
+*.pri
+Binaries/*
+CMakeLists.txt
+DerivedDataCache/*
+Intermediate/*
+Makefile
+Plugins/ShaderFishPlugin/Intermediate/*
+Saved/*
+*.code-workspace
+*.kdev4
+*.pro
+*.pro.user
+*.workspace
+ThirdParty/grpc/GrpcIncludes/include/*
+ThirdParty/grpc/GrpcIncludes/third_party/*
+ThirdParty/grpc/GrpcPrograms/Linux/*

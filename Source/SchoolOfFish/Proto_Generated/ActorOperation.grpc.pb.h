@@ -26,79 +26,102 @@
 #include <grpcpp/impl/codegen/stub_options.h>
 #include <grpcpp/impl/codegen/sync_stream.h>
 
+namespace rpc {
+
 class ActorOperation final {
  public:
   static constexpr char const* service_full_name() {
-    return "ActorOperation";
+    return "rpc.ActorOperation";
   }
   class StubInterface {
    public:
     virtual ~StubInterface() {}
     // Sets the transform of the actor
-    virtual ::grpc::Status SetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform& request, ::Empty* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Empty>> AsyncSetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Empty>>(AsyncSetActorTransformRaw(context, request, cq));
+    virtual ::grpc::Status SetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform& request, ::rpc::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>> AsyncSetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>>(AsyncSetActorTransformRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Empty>> PrepareAsyncSetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Empty>>(PrepareAsyncSetActorTransformRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>> PrepareAsyncSetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>>(PrepareAsyncSetActorTransformRaw(context, request, cq));
     }
     // Retrieves the current transform of the actor
-    virtual ::grpc::Status GetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex& request, ::Transform* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Transform>> AsyncGetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Transform>>(AsyncGetActorTransformRaw(context, request, cq));
+    virtual ::grpc::Status GetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo& request, ::rpc::ActorInstanceTransform* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::ActorInstanceTransform>> AsyncGetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::ActorInstanceTransform>>(AsyncGetActorTransformRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Transform>> PrepareAsyncGetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Transform>>(PrepareAsyncGetActorTransformRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::ActorInstanceTransform>> PrepareAsyncGetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::ActorInstanceTransform>>(PrepareAsyncGetActorTransformRaw(context, request, cq));
+    }
+    // Inform Server about actor environment Info
+    virtual ::grpc::Status InformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo& request, ::rpc::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>> AsyncInformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>>(AsyncInformEnvironmentInfoRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>> PrepareAsyncInformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>>(PrepareAsyncInformEnvironmentInfoRaw(context, request, cq));
     }
     // Applies force to the actor
-    virtual ::grpc::Status ApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce& request, ::Empty* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Empty>> AsyncApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Empty>>(AsyncApplyForceToActorRaw(context, request, cq));
+    virtual ::grpc::Status ApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce& request, ::rpc::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>> AsyncApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>>(AsyncApplyForceToActorRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Empty>> PrepareAsyncApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Empty>>(PrepareAsyncApplyForceToActorRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>> PrepareAsyncApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>>(PrepareAsyncApplyForceToActorRaw(context, request, cq));
     }
     class experimental_async_interface {
      public:
       virtual ~experimental_async_interface() {}
       // Sets the transform of the actor
-      virtual void SetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform* request, ::Empty* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) = 0;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      virtual void SetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform* request, ::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void SetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       #else
-      virtual void SetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform* request, ::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      virtual void SetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
       #endif
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      virtual void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       #else
-      virtual void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      virtual void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
       #endif
       // Retrieves the current transform of the actor
-      virtual void GetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex* request, ::Transform* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Transform* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo* request, ::rpc::ActorInstanceTransform* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::ActorInstanceTransform* response, std::function<void(::grpc::Status)>) = 0;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      virtual void GetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex* request, ::Transform* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo* request, ::rpc::ActorInstanceTransform* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       #else
-      virtual void GetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex* request, ::Transform* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      virtual void GetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo* request, ::rpc::ActorInstanceTransform* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
       #endif
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      virtual void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Transform* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::ActorInstanceTransform* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       #else
-      virtual void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Transform* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      virtual void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::ActorInstanceTransform* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      // Inform Server about actor environment Info
+      virtual void InformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void InformEnvironmentInfo(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void InformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void InformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void InformEnvironmentInfo(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void InformEnvironmentInfo(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
       #endif
       // Applies force to the actor
-      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce* request, ::Empty* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) = 0;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce* request, ::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       #else
-      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce* request, ::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
       #endif
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       #else
-      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      virtual void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
       #endif
     };
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -109,75 +132,96 @@ class ActorOperation final {
     #endif
     virtual class experimental_async_interface* experimental_async() { return nullptr; }
   private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Empty>* AsyncSetActorTransformRaw(::grpc::ClientContext* context, const ::InstanceTransform& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Empty>* PrepareAsyncSetActorTransformRaw(::grpc::ClientContext* context, const ::InstanceTransform& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Transform>* AsyncGetActorTransformRaw(::grpc::ClientContext* context, const ::InstanceIndex& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Transform>* PrepareAsyncGetActorTransformRaw(::grpc::ClientContext* context, const ::InstanceIndex& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Empty>* AsyncApplyForceToActorRaw(::grpc::ClientContext* context, const ::InstanceForce& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Empty>* PrepareAsyncApplyForceToActorRaw(::grpc::ClientContext* context, const ::InstanceForce& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>* AsyncSetActorTransformRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>* PrepareAsyncSetActorTransformRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rpc::ActorInstanceTransform>* AsyncGetActorTransformRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rpc::ActorInstanceTransform>* PrepareAsyncGetActorTransformRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>* AsyncInformEnvironmentInfoRaw(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>* PrepareAsyncInformEnvironmentInfoRaw(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>* AsyncApplyForceToActorRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rpc::Empty>* PrepareAsyncApplyForceToActorRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
-    ::grpc::Status SetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform& request, ::Empty* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Empty>> AsyncSetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Empty>>(AsyncSetActorTransformRaw(context, request, cq));
+    ::grpc::Status SetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform& request, ::rpc::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>> AsyncSetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>>(AsyncSetActorTransformRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Empty>> PrepareAsyncSetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Empty>>(PrepareAsyncSetActorTransformRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>> PrepareAsyncSetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>>(PrepareAsyncSetActorTransformRaw(context, request, cq));
     }
-    ::grpc::Status GetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex& request, ::Transform* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Transform>> AsyncGetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Transform>>(AsyncGetActorTransformRaw(context, request, cq));
+    ::grpc::Status GetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo& request, ::rpc::ActorInstanceTransform* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::ActorInstanceTransform>> AsyncGetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::ActorInstanceTransform>>(AsyncGetActorTransformRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Transform>> PrepareAsyncGetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Transform>>(PrepareAsyncGetActorTransformRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::ActorInstanceTransform>> PrepareAsyncGetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::ActorInstanceTransform>>(PrepareAsyncGetActorTransformRaw(context, request, cq));
     }
-    ::grpc::Status ApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce& request, ::Empty* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Empty>> AsyncApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Empty>>(AsyncApplyForceToActorRaw(context, request, cq));
+    ::grpc::Status InformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo& request, ::rpc::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>> AsyncInformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>>(AsyncInformEnvironmentInfoRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Empty>> PrepareAsyncApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Empty>>(PrepareAsyncApplyForceToActorRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>> PrepareAsyncInformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>>(PrepareAsyncInformEnvironmentInfoRaw(context, request, cq));
+    }
+    ::grpc::Status ApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce& request, ::rpc::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>> AsyncApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>>(AsyncApplyForceToActorRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>> PrepareAsyncApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rpc::Empty>>(PrepareAsyncApplyForceToActorRaw(context, request, cq));
     }
     class experimental_async final :
       public StubInterface::experimental_async_interface {
      public:
-      void SetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform* request, ::Empty* response, std::function<void(::grpc::Status)>) override;
-      void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, std::function<void(::grpc::Status)>) override;
+      void SetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) override;
+      void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) override;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      void SetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform* request, ::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
       #else
-      void SetActorTransform(::grpc::ClientContext* context, const ::InstanceTransform* request, ::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      void SetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
       #endif
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
       #else
-      void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      void SetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
       #endif
-      void GetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex* request, ::Transform* response, std::function<void(::grpc::Status)>) override;
-      void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Transform* response, std::function<void(::grpc::Status)>) override;
+      void GetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo* request, ::rpc::ActorInstanceTransform* response, std::function<void(::grpc::Status)>) override;
+      void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::ActorInstanceTransform* response, std::function<void(::grpc::Status)>) override;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      void GetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex* request, ::Transform* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo* request, ::rpc::ActorInstanceTransform* response, ::grpc::ClientUnaryReactor* reactor) override;
       #else
-      void GetActorTransform(::grpc::ClientContext* context, const ::InstanceIndex* request, ::Transform* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
-      #endif
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Transform* response, ::grpc::ClientUnaryReactor* reactor) override;
-      #else
-      void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Transform* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
-      #endif
-      void ApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce* request, ::Empty* response, std::function<void(::grpc::Status)>) override;
-      void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, std::function<void(::grpc::Status)>) override;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      void ApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce* request, ::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
-      #else
-      void ApplyForceToActor(::grpc::ClientContext* context, const ::InstanceForce* request, ::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      void GetActorTransform(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo* request, ::rpc::ActorInstanceTransform* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
       #endif
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::ActorInstanceTransform* response, ::grpc::ClientUnaryReactor* reactor) override;
       #else
-      void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      void GetActorTransform(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::ActorInstanceTransform* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      void InformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) override;
+      void InformEnvironmentInfo(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void InformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void InformEnvironmentInfo(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void InformEnvironmentInfo(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void InformEnvironmentInfo(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      void ApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) override;
+      void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void ApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void ApplyForceToActor(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void ApplyForceToActor(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::rpc::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
       #endif
      private:
       friend class Stub;
@@ -190,14 +234,17 @@ class ActorOperation final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class experimental_async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::Empty>* AsyncSetActorTransformRaw(::grpc::ClientContext* context, const ::InstanceTransform& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Empty>* PrepareAsyncSetActorTransformRaw(::grpc::ClientContext* context, const ::InstanceTransform& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Transform>* AsyncGetActorTransformRaw(::grpc::ClientContext* context, const ::InstanceIndex& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Transform>* PrepareAsyncGetActorTransformRaw(::grpc::ClientContext* context, const ::InstanceIndex& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Empty>* AsyncApplyForceToActorRaw(::grpc::ClientContext* context, const ::InstanceForce& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Empty>* PrepareAsyncApplyForceToActorRaw(::grpc::ClientContext* context, const ::InstanceForce& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rpc::Empty>* AsyncSetActorTransformRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rpc::Empty>* PrepareAsyncSetActorTransformRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceTransform& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rpc::ActorInstanceTransform>* AsyncGetActorTransformRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rpc::ActorInstanceTransform>* PrepareAsyncGetActorTransformRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceInfo& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rpc::Empty>* AsyncInformEnvironmentInfoRaw(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rpc::Empty>* PrepareAsyncInformEnvironmentInfoRaw(::grpc::ClientContext* context, const ::rpc::ActorEnvironmentInfo& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rpc::Empty>* AsyncApplyForceToActorRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rpc::Empty>* PrepareAsyncApplyForceToActorRaw(::grpc::ClientContext* context, const ::rpc::ActorInstanceForce& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_SetActorTransform_;
     const ::grpc::internal::RpcMethod rpcmethod_GetActorTransform_;
+    const ::grpc::internal::RpcMethod rpcmethod_InformEnvironmentInfo_;
     const ::grpc::internal::RpcMethod rpcmethod_ApplyForceToActor_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
@@ -207,11 +254,13 @@ class ActorOperation final {
     Service();
     virtual ~Service();
     // Sets the transform of the actor
-    virtual ::grpc::Status SetActorTransform(::grpc::ServerContext* context, const ::InstanceTransform* request, ::Empty* response);
+    virtual ::grpc::Status SetActorTransform(::grpc::ServerContext* context, const ::rpc::ActorInstanceTransform* request, ::rpc::Empty* response);
     // Retrieves the current transform of the actor
-    virtual ::grpc::Status GetActorTransform(::grpc::ServerContext* context, const ::InstanceIndex* request, ::Transform* response);
+    virtual ::grpc::Status GetActorTransform(::grpc::ServerContext* context, const ::rpc::ActorInstanceInfo* request, ::rpc::ActorInstanceTransform* response);
+    // Inform Server about actor environment Info
+    virtual ::grpc::Status InformEnvironmentInfo(::grpc::ServerContext* context, const ::rpc::ActorEnvironmentInfo* request, ::rpc::Empty* response);
     // Applies force to the actor
-    virtual ::grpc::Status ApplyForceToActor(::grpc::ServerContext* context, const ::InstanceForce* request, ::Empty* response);
+    virtual ::grpc::Status ApplyForceToActor(::grpc::ServerContext* context, const ::rpc::ActorInstanceForce* request, ::rpc::Empty* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_SetActorTransform : public BaseClass {
@@ -225,11 +274,11 @@ class ActorOperation final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceTransform* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceTransform* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSetActorTransform(::grpc::ServerContext* context, ::InstanceTransform* request, ::grpc::ServerAsyncResponseWriter< ::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestSetActorTransform(::grpc::ServerContext* context, ::rpc::ActorInstanceTransform* request, ::grpc::ServerAsyncResponseWriter< ::rpc::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -245,12 +294,32 @@ class ActorOperation final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceIndex* /*request*/, ::Transform* /*response*/) override {
+    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceInfo* /*request*/, ::rpc::ActorInstanceTransform* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestGetActorTransform(::grpc::ServerContext* context, ::InstanceIndex* request, ::grpc::ServerAsyncResponseWriter< ::Transform>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestGetActorTransform(::grpc::ServerContext* context, ::rpc::ActorInstanceInfo* request, ::grpc::ServerAsyncResponseWriter< ::rpc::ActorInstanceTransform>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_InformEnvironmentInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_InformEnvironmentInfo() {
+      ::grpc::Service::MarkMethodAsync(2);
+    }
+    ~WithAsyncMethod_InformEnvironmentInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status InformEnvironmentInfo(::grpc::ServerContext* /*context*/, const ::rpc::ActorEnvironmentInfo* /*request*/, ::rpc::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestInformEnvironmentInfo(::grpc::ServerContext* context, ::rpc::ActorEnvironmentInfo* request, ::grpc::ServerAsyncResponseWriter< ::rpc::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -259,21 +328,21 @@ class ActorOperation final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ApplyForceToActor() {
-      ::grpc::Service::MarkMethodAsync(2);
+      ::grpc::Service::MarkMethodAsync(3);
     }
     ~WithAsyncMethod_ApplyForceToActor() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::InstanceForce* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceForce* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestApplyForceToActor(::grpc::ServerContext* context, ::InstanceForce* request, ::grpc::ServerAsyncResponseWriter< ::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestApplyForceToActor(::grpc::ServerContext* context, ::rpc::ActorInstanceForce* request, ::grpc::ServerAsyncResponseWriter< ::rpc::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_SetActorTransform<WithAsyncMethod_GetActorTransform<WithAsyncMethod_ApplyForceToActor<Service > > > AsyncService;
+  typedef WithAsyncMethod_SetActorTransform<WithAsyncMethod_GetActorTransform<WithAsyncMethod_InformEnvironmentInfo<WithAsyncMethod_ApplyForceToActor<Service > > > > AsyncService;
   template <class BaseClass>
   class ExperimentalWithCallbackMethod_SetActorTransform : public BaseClass {
    private:
@@ -286,38 +355,38 @@ class ActorOperation final {
       ::grpc::Service::experimental().
     #endif
         MarkMethodCallback(0,
-          new ::grpc_impl::internal::CallbackUnaryHandler< ::InstanceTransform, ::Empty>(
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::rpc::ActorInstanceTransform, ::rpc::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
                    ::grpc::CallbackServerContext*
     #else
                    ::grpc::experimental::CallbackServerContext*
     #endif
-                     context, const ::InstanceTransform* request, ::Empty* response) { return this->SetActorTransform(context, request, response); }));}
+                     context, const ::rpc::ActorInstanceTransform* request, ::rpc::Empty* response) { return this->SetActorTransform(context, request, response); }));}
     void SetMessageAllocatorFor_SetActorTransform(
-        ::grpc::experimental::MessageAllocator< ::InstanceTransform, ::Empty>* allocator) {
+        ::grpc::experimental::MessageAllocator< ::rpc::ActorInstanceTransform, ::rpc::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
     #else
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(0);
     #endif
-      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::InstanceTransform, ::Empty>*>(handler)
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::rpc::ActorInstanceTransform, ::rpc::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~ExperimentalWithCallbackMethod_SetActorTransform() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceTransform* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceTransform* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* SetActorTransform(
-      ::grpc::CallbackServerContext* /*context*/, const ::InstanceTransform* /*request*/, ::Empty* /*response*/)
+      ::grpc::CallbackServerContext* /*context*/, const ::rpc::ActorInstanceTransform* /*request*/, ::rpc::Empty* /*response*/)
     #else
     virtual ::grpc::experimental::ServerUnaryReactor* SetActorTransform(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::InstanceTransform* /*request*/, ::Empty* /*response*/)
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::rpc::ActorInstanceTransform* /*request*/, ::rpc::Empty* /*response*/)
     #endif
       { return nullptr; }
   };
@@ -333,38 +402,85 @@ class ActorOperation final {
       ::grpc::Service::experimental().
     #endif
         MarkMethodCallback(1,
-          new ::grpc_impl::internal::CallbackUnaryHandler< ::InstanceIndex, ::Transform>(
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::rpc::ActorInstanceInfo, ::rpc::ActorInstanceTransform>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
                    ::grpc::CallbackServerContext*
     #else
                    ::grpc::experimental::CallbackServerContext*
     #endif
-                     context, const ::InstanceIndex* request, ::Transform* response) { return this->GetActorTransform(context, request, response); }));}
+                     context, const ::rpc::ActorInstanceInfo* request, ::rpc::ActorInstanceTransform* response) { return this->GetActorTransform(context, request, response); }));}
     void SetMessageAllocatorFor_GetActorTransform(
-        ::grpc::experimental::MessageAllocator< ::InstanceIndex, ::Transform>* allocator) {
+        ::grpc::experimental::MessageAllocator< ::rpc::ActorInstanceInfo, ::rpc::ActorInstanceTransform>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
     #else
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(1);
     #endif
-      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::InstanceIndex, ::Transform>*>(handler)
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::rpc::ActorInstanceInfo, ::rpc::ActorInstanceTransform>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~ExperimentalWithCallbackMethod_GetActorTransform() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceIndex* /*request*/, ::Transform* /*response*/) override {
+    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceInfo* /*request*/, ::rpc::ActorInstanceTransform* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* GetActorTransform(
-      ::grpc::CallbackServerContext* /*context*/, const ::InstanceIndex* /*request*/, ::Transform* /*response*/)
+      ::grpc::CallbackServerContext* /*context*/, const ::rpc::ActorInstanceInfo* /*request*/, ::rpc::ActorInstanceTransform* /*response*/)
     #else
     virtual ::grpc::experimental::ServerUnaryReactor* GetActorTransform(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::InstanceIndex* /*request*/, ::Transform* /*response*/)
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::rpc::ActorInstanceInfo* /*request*/, ::rpc::ActorInstanceTransform* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_InformEnvironmentInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_InformEnvironmentInfo() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(2,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::rpc::ActorEnvironmentInfo, ::rpc::Empty>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::rpc::ActorEnvironmentInfo* request, ::rpc::Empty* response) { return this->InformEnvironmentInfo(context, request, response); }));}
+    void SetMessageAllocatorFor_InformEnvironmentInfo(
+        ::grpc::experimental::MessageAllocator< ::rpc::ActorEnvironmentInfo, ::rpc::Empty>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(2);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::rpc::ActorEnvironmentInfo, ::rpc::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_InformEnvironmentInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status InformEnvironmentInfo(::grpc::ServerContext* /*context*/, const ::rpc::ActorEnvironmentInfo* /*request*/, ::rpc::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* InformEnvironmentInfo(
+      ::grpc::CallbackServerContext* /*context*/, const ::rpc::ActorEnvironmentInfo* /*request*/, ::rpc::Empty* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* InformEnvironmentInfo(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::rpc::ActorEnvironmentInfo* /*request*/, ::rpc::Empty* /*response*/)
     #endif
       { return nullptr; }
   };
@@ -379,47 +495,47 @@ class ActorOperation final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(2,
-          new ::grpc_impl::internal::CallbackUnaryHandler< ::InstanceForce, ::Empty>(
+        MarkMethodCallback(3,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::rpc::ActorInstanceForce, ::rpc::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
                    ::grpc::CallbackServerContext*
     #else
                    ::grpc::experimental::CallbackServerContext*
     #endif
-                     context, const ::InstanceForce* request, ::Empty* response) { return this->ApplyForceToActor(context, request, response); }));}
+                     context, const ::rpc::ActorInstanceForce* request, ::rpc::Empty* response) { return this->ApplyForceToActor(context, request, response); }));}
     void SetMessageAllocatorFor_ApplyForceToActor(
-        ::grpc::experimental::MessageAllocator< ::InstanceForce, ::Empty>* allocator) {
+        ::grpc::experimental::MessageAllocator< ::rpc::ActorInstanceForce, ::rpc::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(2);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(3);
     #endif
-      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::InstanceForce, ::Empty>*>(handler)
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::rpc::ActorInstanceForce, ::rpc::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~ExperimentalWithCallbackMethod_ApplyForceToActor() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::InstanceForce* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceForce* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* ApplyForceToActor(
-      ::grpc::CallbackServerContext* /*context*/, const ::InstanceForce* /*request*/, ::Empty* /*response*/)
+      ::grpc::CallbackServerContext* /*context*/, const ::rpc::ActorInstanceForce* /*request*/, ::rpc::Empty* /*response*/)
     #else
     virtual ::grpc::experimental::ServerUnaryReactor* ApplyForceToActor(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::InstanceForce* /*request*/, ::Empty* /*response*/)
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::rpc::ActorInstanceForce* /*request*/, ::rpc::Empty* /*response*/)
     #endif
       { return nullptr; }
   };
   #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-  typedef ExperimentalWithCallbackMethod_SetActorTransform<ExperimentalWithCallbackMethod_GetActorTransform<ExperimentalWithCallbackMethod_ApplyForceToActor<Service > > > CallbackService;
+  typedef ExperimentalWithCallbackMethod_SetActorTransform<ExperimentalWithCallbackMethod_GetActorTransform<ExperimentalWithCallbackMethod_InformEnvironmentInfo<ExperimentalWithCallbackMethod_ApplyForceToActor<Service > > > > CallbackService;
   #endif
 
-  typedef ExperimentalWithCallbackMethod_SetActorTransform<ExperimentalWithCallbackMethod_GetActorTransform<ExperimentalWithCallbackMethod_ApplyForceToActor<Service > > > ExperimentalCallbackService;
+  typedef ExperimentalWithCallbackMethod_SetActorTransform<ExperimentalWithCallbackMethod_GetActorTransform<ExperimentalWithCallbackMethod_InformEnvironmentInfo<ExperimentalWithCallbackMethod_ApplyForceToActor<Service > > > > ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_SetActorTransform : public BaseClass {
    private:
@@ -432,7 +548,7 @@ class ActorOperation final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceTransform* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceTransform* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -449,7 +565,24 @@ class ActorOperation final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceIndex* /*request*/, ::Transform* /*response*/) override {
+    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceInfo* /*request*/, ::rpc::ActorInstanceTransform* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_InformEnvironmentInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_InformEnvironmentInfo() {
+      ::grpc::Service::MarkMethodGeneric(2);
+    }
+    ~WithGenericMethod_InformEnvironmentInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status InformEnvironmentInfo(::grpc::ServerContext* /*context*/, const ::rpc::ActorEnvironmentInfo* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -460,13 +593,13 @@ class ActorOperation final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ApplyForceToActor() {
-      ::grpc::Service::MarkMethodGeneric(2);
+      ::grpc::Service::MarkMethodGeneric(3);
     }
     ~WithGenericMethod_ApplyForceToActor() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::InstanceForce* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceForce* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -483,7 +616,7 @@ class ActorOperation final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceTransform* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceTransform* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -503,7 +636,7 @@ class ActorOperation final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceIndex* /*request*/, ::Transform* /*response*/) override {
+    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceInfo* /*request*/, ::rpc::ActorInstanceTransform* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -512,23 +645,43 @@ class ActorOperation final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_InformEnvironmentInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_InformEnvironmentInfo() {
+      ::grpc::Service::MarkMethodRaw(2);
+    }
+    ~WithRawMethod_InformEnvironmentInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status InformEnvironmentInfo(::grpc::ServerContext* /*context*/, const ::rpc::ActorEnvironmentInfo* /*request*/, ::rpc::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestInformEnvironmentInfo(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_ApplyForceToActor : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ApplyForceToActor() {
-      ::grpc::Service::MarkMethodRaw(2);
+      ::grpc::Service::MarkMethodRaw(3);
     }
     ~WithRawMethod_ApplyForceToActor() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::InstanceForce* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceForce* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestApplyForceToActor(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -556,7 +709,7 @@ class ActorOperation final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceTransform* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceTransform* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -594,7 +747,7 @@ class ActorOperation final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceIndex* /*request*/, ::Transform* /*response*/) override {
+    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceInfo* /*request*/, ::rpc::ActorInstanceTransform* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -603,6 +756,44 @@ class ActorOperation final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
     #else
     virtual ::grpc::experimental::ServerUnaryReactor* GetActorTransform(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_InformEnvironmentInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_InformEnvironmentInfo() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(2,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->InformEnvironmentInfo(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_InformEnvironmentInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status InformEnvironmentInfo(::grpc::ServerContext* /*context*/, const ::rpc::ActorEnvironmentInfo* /*request*/, ::rpc::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* InformEnvironmentInfo(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* InformEnvironmentInfo(
       ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
     #endif
       { return nullptr; }
@@ -618,7 +809,7 @@ class ActorOperation final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(2,
+        MarkMethodRawCallback(3,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -632,7 +823,7 @@ class ActorOperation final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::InstanceForce* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceForce* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -652,18 +843,18 @@ class ActorOperation final {
    public:
     WithStreamedUnaryMethod_SetActorTransform() {
       ::grpc::Service::MarkMethodStreamed(0,
-        new ::grpc::internal::StreamedUnaryHandler< ::InstanceTransform, ::Empty>(std::bind(&WithStreamedUnaryMethod_SetActorTransform<BaseClass>::StreamedSetActorTransform, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler< ::rpc::ActorInstanceTransform, ::rpc::Empty>(std::bind(&WithStreamedUnaryMethod_SetActorTransform<BaseClass>::StreamedSetActorTransform, this, std::placeholders::_1, std::placeholders::_2)));
     }
     ~WithStreamedUnaryMethod_SetActorTransform() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceTransform* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status SetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceTransform* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedSetActorTransform(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::InstanceTransform,::Empty>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedSetActorTransform(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rpc::ActorInstanceTransform,::rpc::Empty>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_GetActorTransform : public BaseClass {
@@ -672,18 +863,38 @@ class ActorOperation final {
    public:
     WithStreamedUnaryMethod_GetActorTransform() {
       ::grpc::Service::MarkMethodStreamed(1,
-        new ::grpc::internal::StreamedUnaryHandler< ::InstanceIndex, ::Transform>(std::bind(&WithStreamedUnaryMethod_GetActorTransform<BaseClass>::StreamedGetActorTransform, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler< ::rpc::ActorInstanceInfo, ::rpc::ActorInstanceTransform>(std::bind(&WithStreamedUnaryMethod_GetActorTransform<BaseClass>::StreamedGetActorTransform, this, std::placeholders::_1, std::placeholders::_2)));
     }
     ~WithStreamedUnaryMethod_GetActorTransform() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::InstanceIndex* /*request*/, ::Transform* /*response*/) override {
+    ::grpc::Status GetActorTransform(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceInfo* /*request*/, ::rpc::ActorInstanceTransform* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedGetActorTransform(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::InstanceIndex,::Transform>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedGetActorTransform(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rpc::ActorInstanceInfo,::rpc::ActorInstanceTransform>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_InformEnvironmentInfo : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_InformEnvironmentInfo() {
+      ::grpc::Service::MarkMethodStreamed(2,
+        new ::grpc::internal::StreamedUnaryHandler< ::rpc::ActorEnvironmentInfo, ::rpc::Empty>(std::bind(&WithStreamedUnaryMethod_InformEnvironmentInfo<BaseClass>::StreamedInformEnvironmentInfo, this, std::placeholders::_1, std::placeholders::_2)));
+    }
+    ~WithStreamedUnaryMethod_InformEnvironmentInfo() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status InformEnvironmentInfo(::grpc::ServerContext* /*context*/, const ::rpc::ActorEnvironmentInfo* /*request*/, ::rpc::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedInformEnvironmentInfo(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rpc::ActorEnvironmentInfo,::rpc::Empty>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_ApplyForceToActor : public BaseClass {
@@ -691,24 +902,26 @@ class ActorOperation final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_ApplyForceToActor() {
-      ::grpc::Service::MarkMethodStreamed(2,
-        new ::grpc::internal::StreamedUnaryHandler< ::InstanceForce, ::Empty>(std::bind(&WithStreamedUnaryMethod_ApplyForceToActor<BaseClass>::StreamedApplyForceToActor, this, std::placeholders::_1, std::placeholders::_2)));
+      ::grpc::Service::MarkMethodStreamed(3,
+        new ::grpc::internal::StreamedUnaryHandler< ::rpc::ActorInstanceForce, ::rpc::Empty>(std::bind(&WithStreamedUnaryMethod_ApplyForceToActor<BaseClass>::StreamedApplyForceToActor, this, std::placeholders::_1, std::placeholders::_2)));
     }
     ~WithStreamedUnaryMethod_ApplyForceToActor() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::InstanceForce* /*request*/, ::Empty* /*response*/) override {
+    ::grpc::Status ApplyForceToActor(::grpc::ServerContext* /*context*/, const ::rpc::ActorInstanceForce* /*request*/, ::rpc::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedApplyForceToActor(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::InstanceForce,::Empty>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedApplyForceToActor(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rpc::ActorInstanceForce,::rpc::Empty>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_GetActorTransform<WithStreamedUnaryMethod_ApplyForceToActor<Service > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_GetActorTransform<WithStreamedUnaryMethod_InformEnvironmentInfo<WithStreamedUnaryMethod_ApplyForceToActor<Service > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_GetActorTransform<WithStreamedUnaryMethod_ApplyForceToActor<Service > > > StreamedService;
+  typedef WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_GetActorTransform<WithStreamedUnaryMethod_InformEnvironmentInfo<WithStreamedUnaryMethod_ApplyForceToActor<Service > > > > StreamedService;
 };
+
+}  // namespace rpc
 
 
 #endif  // GRPC_ActorOperation_2eproto__INCLUDED

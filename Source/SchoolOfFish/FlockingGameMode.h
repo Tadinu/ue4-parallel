@@ -6,6 +6,9 @@
 #include "FlockingGameMode.generated.h"
 
 
+class AFishAgent;
+class UActorOperationRpcClient;
+class UChannelCredentials;
 UCLASS()
 class SCHOOLOFFISH_API AFlockingGameMode : public AGameMode
 {
@@ -13,4 +16,13 @@ class SCHOOLOFFISH_API AFlockingGameMode : public AGameMode
 
 public:
 	virtual void InitGameState() override;
+
+    UPROPERTY()
+    AFishAgent* FishAgent = nullptr;
+
+    UPROPERTY()
+    UActorOperationRpcClient* GRPCClient = nullptr;
+
+    UPROPERTY()
+    UChannelCredentials* ChannelCredentials = nullptr;
 };

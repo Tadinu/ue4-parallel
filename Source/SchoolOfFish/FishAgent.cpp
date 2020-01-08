@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "FishAgent.h"
-#include "FlockingGameMode.h"
+#include <iostream>
+
 #include "Engine/World.h"
 #include "Components/PrimitiveComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -12,7 +13,8 @@
 #include "ScopeLock.h"
 #include "Engine/StaticMesh.h"
 
-#include <iostream>
+#include "FlockingGameMode.h"
+
 FVector checkMapRange(const FVector &map, const FVector &currentPosition, const FVector &currentVelocity)
 {
 	FVector newVelocity = currentVelocity;
@@ -231,30 +233,94 @@ bool AFishAgent::AddForceToFishInstance(int32 InstanceIndex, const FVector& Forc
 
 void AFishAgent::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 
-	if (m_isGpu) {
+    GameMode = Cast<AFlockingGameMode>(GetWorld()->GetAuthGameMode());
+
+    if (m_isGpu) {
+#if USING_GPU_COMPUTER_SHADER
         m_gpuProcessing = std::make_unique<FishShaderProcessing>(m_fishNum,
-			m_radiusCohesion, m_radiusSeparation, m_radiusAlignment,
-			m_mapSize.X, m_mapSize.Y, m_mapSize.Z,
-			m_kCohesion, m_kSeparation, m_kAlignment,
-			m_maxAcceleration, m_maxVelocity,
-			GetWorld()->Scene->GetFeatureLevel()
+            m_radiusCohesion, m_radiusSeparation, m_radiusAlignment,
+            m_mapSize.X, m_mapSize.Y, m_mapSize.Z,
+            m_kCohesion, m_kSeparation, m_kAlignment,
+            m_maxAcceleration, m_maxVelocity,
+            GetWorld()->Scene->GetFeatureLevel()
         );
-	}
+#endif
+    }
+}
+
+void AFishAgent::SendToServerRequestFishTransform(int32 FishIndex)
+{
+    if(FishIndex < 0 || FishIndex >= m_fishNum) return;
+    if(GameMode) {
+        FActorInstanceInfo fishInfo;
+        fishInfo.instanceIndex = FishIndex;
+        const State& gpuFishState = m_gpuFishStates[FishIndex];
+
+        fishInfo.position        = gpuFishState.location();
+        fishInfo.velocity        = gpuFishState.vel();
+        fishInfo.acceleration    = gpuFishState.accel();
+        fishInfo.steerCohesion   = gpuFishState.steerCoh();
+        fishInfo.steerSeparation = gpuFishState.steerSepa();
+        fishInfo.steerAlignmen   = gpuFishState.steerAlign();
+
+        fishInfo.steerCohesionCnt   = gpuFishState.steerCohesionCnt;
+        fishInfo.steerSeparationCnt = gpuFishState.steerSeparationCnt;
+        fishInfo.steerAlignmentCnt  = gpuFishState.steerAlignmentCnt;
+
+        GameMode->GRPCClient->RequestGetActorTransform(fishInfo, context);
+    }
+}
+
+void AFishAgent::OnFishTransformReturned(UActorOperationRpcClient* RpcClient,
+                                         const FActorInstanceTransform& Response,
+                                         FGrpcStatus Status)
+{
+    if(EGrpcStatusCode::Ok != Status.ErrorCode) return;
+
+    int32 fishIndex = Response.id;
+    if(fishIndex < 0  || fishIndex >= m_fishNum) return;
+    m_gpuFishStates[fishIndex].setLocation(Response.transf.GetLocation());
+}
+
+void AFishAgent::SendToServerEnvironmentInfoToServer(float DeltaTime)
+{
+    if(GameMode) {
+        // SEND [INFORM ENVIRONMENT INFO => COMPUTE SERVER]
+        FActorEnvironmentInfo envInfo;
+        envInfo.instanceCount = m_fishNum;
+
+        envInfo.radiusCohesion   = m_radiusCohesion;
+        envInfo.radiusSeparation = m_radiusSeparation;
+        envInfo.radiusAlignment  = m_radiusAlignment;
+
+        envInfo.mapRangeX = m_mapSize.X;
+        envInfo.mapRangeY = m_mapSize.Y;
+        envInfo.mapRangeZ = m_mapSize.Z;
+
+        envInfo.kCohesion   = m_kCohesion;
+        envInfo.kSeparation = m_kSeparation;
+        envInfo.kAlignment  = m_kAlignment;
+        envInfo.maxAcceleration = m_maxAcceleration;
+        envInfo.maxVelocity = m_maxVelocity;
+        envInfo.calculationsPerThread = 1;
+        envInfo.DeltaTime = DeltaTime;
+
+        GameMode->GRPCClient->InformActorEnvironmentInfo(envInfo, context);
+    }
 }
 
 void AFishAgent::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
 
-	if (m_isGpu) {
-#if USING_GPU_COMPUTER_SHADER
+    if (m_isGpu) {
         if (m_elapsedTime > 0.016f) {
             //m_instancedStaticMeshComponent->InitPerInstanceRenderData(false);
-
+#if USING_GPU_COMPUTER_SHADER
             TArray<State> previousGpuFishStates = m_gpuFishStates;
-			m_gpuProcessing->calculate(m_gpuFishStates, DeltaTime);
+            m_gpuProcessing->calculate(m_gpuFishStates, DeltaTime);
             m_gpuProcessing->getStates(m_gpuFishStates);
 
             verify(previousGpuFishStates.Num() == m_gpuFishStates.Num())
@@ -275,10 +341,23 @@ void AFishAgent::Tick(float DeltaTime)
                     m_gpuFishStates[i].position[2] += m_gpuFishStates[i].velocity[2] * DeltaTime;
                 }
             }
+#endif
+            // [ENVIRONMENT INFO] --
+            static bool notYetSent = true;
+            if(notYetSent) {
+                SendToServerEnvironmentInfoToServer(DeltaTime);
+                notYetSent = false;
+            }
 
+            // [REQUEST FISH TRANSFORM] --
+            //
             FTransform transform;
             bool bWorldSpace = false;
             for (int32 i = 0; i < m_fishNum; i++) {
+#if (!USING_GPU_COMPUTER_SHADER)
+                SendToServerRequestFishTransform(i);
+#endif
+                // Fetch the latest transform result returned from Server
                 const State& gpuFishState = m_gpuFishStates[i];
                 transform = FTransform::Identity;
 
@@ -288,32 +367,30 @@ void AFishAgent::Tick(float DeltaTime)
 
                 transform.SetLocation(gpuFishState.location());
                 //transform.SetRotation(FRotationMatrix::MakeFromX(gpuFishState.vel()).Rotator().Add(0.f, -90.f, 0.f).Quaternion());
-
                 if(transform.ContainsNaN()) {
                     std::cout << gpuFishState.instanceIndex << " NAN" << std::endl;
                     continue;
                 }
+
                 m_instancedStaticMeshComponent->UpdateInstanceTransform(i, transform, bWorldSpace);
-			}
+            }
 #if 0 // THIS CAUSE CRASH ON PerInstanceRenderData going INVALID
             m_instancedStaticMeshComponent->ReleasePerInstanceRenderData();
 #endif
             m_instancedStaticMeshComponent->MarkRenderStateDirty();
-			m_elapsedTime = 0.f;
-		} else {
-			m_elapsedTime += DeltaTime;
+            m_elapsedTime = 0.f;
+        } else {
+            m_elapsedTime += DeltaTime;
             SetFishUpdateRequest(false);
-		}
-#else
-#endif
-	} else {
-		if (m_elapsedTime > 0.016f) {
-			cpuCalculate(m_fishStates, DeltaTime, m_isCpuSingleThread);
-			m_elapsedTime = 0.f;
-		} else {
-			m_elapsedTime += DeltaTime;
-		}
-	}
+        }
+    } else {
+        if (m_elapsedTime > 0.016f) {
+            cpuCalculate(m_fishStates, DeltaTime, m_isCpuSingleThread);
+            m_elapsedTime = 0.f;
+        } else {
+            m_elapsedTime += DeltaTime;
+        }
+    }
 }
 
 void AFishAgent::cpuCalculate(TArray<TArray<FFishState>>& agents, float DeltaTime, bool isSingleThread)

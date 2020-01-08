@@ -4,12 +4,18 @@
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "FishAgent.h"
-#include "GrpcServerWrapper.h"
+#include "GrpcServerAdapter.h"
+#include "GrpcClientAdapter.h"
 
 void AFlockingGameMode::InitGameState()
 {
-	Super::InitGameState();
-    AFishAgent* fishAgent                 = Cast<AFishAgent>(GetWorld()->SpawnActor(AFishAgent::StaticClass()));
-    AGrpcServerWrapper* grpcServerWrapper = Cast<AGrpcServerWrapper>(GetWorld()->SpawnActor(AGrpcServerWrapper::StaticClass()));
-    grpcServerWrapper->StartActorRPC(fishAgent);
+    Super::InitGameState();
+    FishAgent  = Cast<AFishAgent>(GetWorld()->SpawnActor(AFishAgent::StaticClass()));
+
+    ChannelCredentials = UChannelCredentials::MakeInsecureChannelCredentials();
+    GRPCClient = NewRpcClient<UActorOperationRpcClient>(TEXT("0.0.0.0:50051"), // or "localhost:50051"
+                                                        ChannelCredentials,
+                                                        this);
+
+    GRPCClient->EventGetActorTransform.AddDynamic(FishAgent, &AFishAgent::OnFishTransformReturned);
 }

@@ -2,26 +2,26 @@
 
 #include <grpc++/grpc++.h>
 #include "CoreMinimal.h"
-#include "GrpcServiceImp.h"
+#include "GrpcActorOperationService.h"
 #include "GameFramework/Actor.h"
 #include "Engine/StaticMeshActor.h"
-#include "GrpcServerWrapper.generated.h"
+#include "GrpcServerAdapter.generated.h"
 
 typedef grpc::Server GrpcServer;
 
 class AFishAgent;
 
 UCLASS()
-class SCHOOLOFFISH_API AGrpcServerWrapper : public AActor
+class SCHOOLOFFISH_API AGrpcServerAdapter : public AActor
 {
 	GENERATED_BODY()
 
-	AGrpcServerWrapper();
+    AGrpcServerAdapter();
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	public:
-        void StartActorRPC(AFishAgent* Actor);
+        void StartRPC(AFishAgent* Actor);
 		
         //The actor that we are controlling
         UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=ActorOperation)
@@ -31,9 +31,8 @@ class SCHOOLOFFISH_API AGrpcServerWrapper : public AActor
         UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=ActorOperation)
         int port = 50051;
 	
-	private:
-		
+        void SetActorTransform(int32 Id, const FTransform& Transform);
 		//The gRPC service implementation and server object
-        TUniquePtr<GrpcServiceImp> GRPCService;
+        TUniquePtr<GrpcActorOperationService> GRPCService;
         TUniquePtr<GrpcServer> GRPCServer;
 };
