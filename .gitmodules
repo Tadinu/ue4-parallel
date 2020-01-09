@@ -1,0 +1,3 @@
+[submodule "Plugins/InfraworldRuntime"]
+	path = Plugins/InfraworldRuntime
+	url = git@github.com:Tadinu/InfraworldRuntime.git
