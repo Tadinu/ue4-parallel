@@ -38,37 +38,7 @@ public class SchoolOfFish : ModuleRules
         }
     }
 
-    [Conditional("DEBUG")]
-    [Conditional("TRACE")]
-    private void clog(params object[] objects)
-    {
-        Console.WriteLine(string.Join(", ", objects));
-    }
-
-	    private IEnumerable<string> FindFilesInDirectory(string dir, string suffix = "")
-    {
-        List<string> matches = new List<string>();
-        if (Directory.Exists(dir))
-        {
-            string[] files = Directory.GetFiles(dir);
-            Regex regex = new Regex(".+\\." + suffix);
-
-            foreach (string file in files)
-            {
-                if (regex.Match(file).Success)
-                    matches.Add(file);
-            }
-        }
-
-        return matches;
-    }
-
-    private string GetConfigurationString()
-    {
-        return (Configuration == UnrealTargetConfiguration.Shipping) ? "Release" : "Debug";
-    }
-
-    public GRPCModuleDepPaths GatherDeps()
+    public GRPCModuleDepPaths GatherGRPCDeps()
     {
         string RootPath = Path.GetFullPath(Path.Combine(ModuleDirectory, "../../ThirdParty/grpc/"));
 
@@ -100,17 +70,84 @@ public class SchoolOfFish : ModuleRules
 
     }
 
+    public class CudaFarmModuleDepPaths
+    {
+        public readonly string[] HeaderPaths;
+        public readonly string[] LibraryPaths;
+
+        public CudaFarmModuleDepPaths(string[] headerPaths, string[] libraryPaths)
+        {
+            HeaderPaths = headerPaths;
+            LibraryPaths = libraryPaths;
+        }
+
+        public override string ToString()
+        {
+            return "Headers:\n" + string.Join("\n", HeaderPaths) + "\nLibs:\n" + string.Join("\n", LibraryPaths);
+        }
+    }
+
+    public CudaFarmModuleDepPaths GatherCudaFarmDeps()
+    {
+        string RootPath = Path.GetFullPath(Path.Combine(ModuleDirectory, "../../ThirdParty/CudaFarm/"));
+
+        List<string> headers = new List<string>();
+        List<string> libs = new List<string>();
+
+        string PlatformLibRoot = "";
+
+        PlatformLibRoot = Path.Combine(RootPath, "release", "lib");
+        if (Platform == UnrealTargetPlatform.Win64)
+        {
+            libs.AddRange(FindFilesInDirectory(PlatformLibRoot, "lib"));
+        }
+        else
+        {
+            libs.AddRange(FindFilesInDirectory(PlatformLibRoot, "a"));
+        }
+
+        clog("PlatformLibRoot: " + PlatformLibRoot);
+
+        headers.Add(Path.Combine(RootPath, "include"));
+
+        return new CudaFarmModuleDepPaths(headers.ToArray(), libs.ToArray());
+    }
+
+    [Conditional("DEBUG")]
+    [Conditional("TRACE")]
+    private void clog(params object[] objects)
+    {
+        Console.WriteLine(string.Join(", ", objects));
+    }
+
+	    private IEnumerable<string> FindFilesInDirectory(string dir, string suffix = "")
+    {
+        List<string> matches = new List<string>();
+        if (Directory.Exists(dir))
+        {
+            string[] files = Directory.GetFiles(dir);
+            Regex regex = new Regex(".+\\." + suffix);
+
+            foreach (string file in files)
+            {
+                if (regex.Match(file).Success)
+                    matches.Add(file);
+            }
+        }
+
+        return matches;
+    }
+
+    private string GetConfigurationString()
+    {
+        return (Configuration == UnrealTargetConfiguration.Shipping) ? "Release" : "Debug";
+    }
+
 	public SchoolOfFish(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		// GRPC --
-		//
-	    PublicDefinitions.Add("GOOGLE_PROTOBUF_NO_RTTI");
-        PublicDefinitions.Add("GOOGLE_PROTOBUF_USE_UNALIGNED=0");
-        PublicDefinitions.Add("GPR_FORBID_UNREACHABLE_CODE");
-        PublicDefinitions.Add("GRPC_ALLOW_EXCEPTIONS=0");
-
+        // CUDA --
         //TODO: We do this because in file generated_message_table_driven.h that located in protobuf sources
         //TODO: line 174: static_assert(std::is_pod<AuxillaryParseTableField>::value, "");
         //TODO: causes С4647 level 3 warning __is_pod behavior change
@@ -121,7 +158,17 @@ public class SchoolOfFish : ModuleRules
 		Platform = Target.Platform;
         Configuration = Target.Configuration;
 
-        GRPCModuleDepPaths moduleDepPaths = GatherDeps();
+        // CudaFarm --
+        CudaFarmModuleDepPaths cudaFarmModuleDepPaths = GatherCudaFarmDeps();
+        Console.WriteLine(cudaFarmModuleDepPaths.ToString());
+
+		// GRPC --
+	    PublicDefinitions.Add("GOOGLE_PROTOBUF_NO_RTTI");
+        PublicDefinitions.Add("GOOGLE_PROTOBUF_USE_UNALIGNED=0");
+        PublicDefinitions.Add("GPR_FORBID_UNREACHABLE_CODE");
+        PublicDefinitions.Add("GRPC_ALLOW_EXCEPTIONS=0");
+
+        GRPCModuleDepPaths moduleDepPaths = GatherGRPCDeps();
         Console.WriteLine(moduleDepPaths.ToString());
 
         PublicIncludePaths.AddRange(moduleDepPaths.HeaderPaths);
