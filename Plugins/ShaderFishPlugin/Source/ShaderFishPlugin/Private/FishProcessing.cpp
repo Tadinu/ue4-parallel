@@ -3,6 +3,7 @@
 #include "FishProcessing.h"
 #include "CoreUObject.h"
 #include "Engine.h"
+#include "Shader.h"
 
 #define NUM_THREADS_PER_GROUP_DIMENSION 128 
 
@@ -79,11 +80,12 @@ void FishProcessing::ExecuteInRenderThread(const TArray<State> &currentStates, T
 
 	FRHICommandListImmediate& commandList = GRHICommandList.GetImmediateCommandList();
     TShaderMapRef<FFishShader> shader(GetGlobalShaderMap(m_featureLevel));
-	commandList.SetComputeShader(shader->GetComputeShader());
-	shader->setShaderData(commandList, uav);
-	shader->setUniformBuffers(commandList, m_constantParameters, m_variableParameters);
-	DispatchComputeShader(commandList, *shader, 1, m_threadNumGroupCount, 1);
-	shader->cleanupShaderData(commandList);	
+    FRHIComputeShader* computeShader = shader.GetComputeShader();
+    commandList.SetComputeShader(computeShader);
+    shader->setShaderData(commandList, computeShader, uav);
+    shader->setUniformBuffers(commandList, computeShader, m_constantParameters, m_variableParameters);
+    DispatchComputeShader(commandList, shader, 1, m_threadNumGroupCount, 1);
+    shader->cleanupShaderData(commandList, computeShader);
 
 	char* shaderData = (char*)commandList.LockStructuredBuffer(buffer, 0, sizeof(State) * 2 * m_constantParameters.fishCount, EResourceLockMode::RLM_ReadOnly);
 	State* p = (State*)shaderData;

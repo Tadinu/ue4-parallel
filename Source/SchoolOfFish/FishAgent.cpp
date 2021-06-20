@@ -6,10 +6,10 @@
 #include "Components/PrimitiveComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
-#include "ConstructorHelpers.h"
-#include "ParallelFor.h"
-#include "Event.h"
-#include "ScopeLock.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Async/ParallelFor.h"
+#include "HAL/Event.h"
+#include "Misc/ScopeLock.h"
 #include "Engine/StaticMesh.h"
 
 FVector checkMapRange(const FVector &map, const FVector &currentPosition, const FVector &currentVelocity)
@@ -143,8 +143,8 @@ void AFishAgent::OnConstruction(const FTransform& Transform)
 			stateCopy.position = state.position = randomPos;
 			stateCopy.velocity = state.velocity = randRotator.Vector() * 10000;
 			stateCopy.acceleration = state.acceleration = FVector::ZeroVector;
-			m_fishStates[i][m_currentStatesIndex] = state;
-			m_fishStates[i][m_previousStatesIndex] = stateCopy;
+            m_fishStates[i][m_currentStatesIndex] = MoveTemp(state);
+            m_fishStates[i][m_previousStatesIndex] = MoveTemp(stateCopy);
 		}
 	}
 }

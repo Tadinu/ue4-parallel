@@ -77,12 +77,13 @@ public:
         return IsFeatureLevelSupported(Parameters.Platform, ERHIFeatureLevel::SM5);
     }
 
-	virtual bool Serialize(FArchive& Ar) override { bool bShaderHasOutdatedParams = FGlobalShader::Serialize(Ar); Ar << m_shaderResource; return bShaderHasOutdatedParams; }
+    //virtual bool Serialize(FArchive& Ar) override { bool bShaderHasOutdatedParams = FGlobalShader::Serialize(Ar); Ar << m_shaderResource; return bShaderHasOutdatedParams; }
 
-	void setShaderData(FRHICommandList& commandList, FUnorderedAccessViewRHIRef uav);
-	void setUniformBuffers(FRHICommandList& commandList, FConstantParameters& constants, FVariableParameters& variables);
-	void cleanupShaderData(FRHICommandList& commandList);
+    void setShaderData(FRHICommandList& commandList, FRHIComputeShader* ComputeShader, FUnorderedAccessViewRHIRef uav);
+    void setUniformBuffers(FRHICommandList& commandList, FRHIComputeShader* ComputeShader, FConstantParameters& constants, FVariableParameters& variables);
+    void cleanupShaderData(FRHICommandList& commandList, FRHIComputeShader* ComputeShader);
 
 private:
 	FShaderResourceParameter m_shaderResource;
 };
+

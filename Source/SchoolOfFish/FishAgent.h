@@ -67,7 +67,7 @@ private:
 	bool m_isCpuSingleThread;
 	
 	// This flag indicates where fish state should be calculated. On GPU or on CPU. CPU - by default
-	bool m_isGpu;
+    bool m_isGpu = false;
 
 	// time elapsed from last calculation
 	float m_elapsedTime = 0.f;

@@ -10,6 +10,7 @@
 #include "Interfaces/IPluginManager.h"
 #include "Misc/Paths.h"
 #include "ShaderCore.h"
+#include "ShaderCompilerCore.h"
 
 #include <iostream>
 IMPLEMENT_GLOBAL_SHADER_PARAMETER_STRUCT(FConstantParameters, "constants");
@@ -50,27 +51,27 @@ FFishShader::FFishShader(const ShaderMetaType::CompiledShaderInitializerType& In
 void FFishShader::ModifyCompilationEnvironment(const FGlobalShaderPermutationParameters& Parameters, FShaderCompilerEnvironment& OutEnvironment)
 {
     FGlobalShader::ModifyCompilationEnvironment(Parameters, OutEnvironment);
-	OutEnvironment.CompilerFlags.Add(CFLAG_StandardOptimization);
+    OutEnvironment.CompilerFlags.Add(ECompilerFlags::CFLAG_StandardOptimization);
 }
 
-void FFishShader::setShaderData(FRHICommandList& commandList, FUnorderedAccessViewRHIRef uav)
+void FFishShader::setShaderData(FRHICommandList& commandList, FRHIComputeShader* ComputeShader, FUnorderedAccessViewRHIRef uav)
 {
 	if (m_shaderResource.IsBound())
-		commandList.SetUAVParameter(GetComputeShader(), m_shaderResource.GetBaseIndex(), uav);
+        commandList.SetUAVParameter(ComputeShader, m_shaderResource.GetBaseIndex(), uav);
 }
 
-void FFishShader::setUniformBuffers(FRHICommandList& commandList, FConstantParameters& constants, FVariableParameters& variables)
+void FFishShader::setUniformBuffers(FRHICommandList& commandList, FRHIComputeShader* ComputeShader, FConstantParameters& constants, FVariableParameters& variables)
 {
-	SetUniformBufferParameter(commandList, GetComputeShader(), GetUniformBufferParameter<FConstantParameters>(),
+    SetUniformBufferParameter(commandList, ComputeShader, GetUniformBufferParameter<FConstantParameters>(),
 		FConstantParametersRef::CreateUniformBufferImmediate(constants, UniformBuffer_SingleDraw));
-	SetUniformBufferParameter(commandList, GetComputeShader(), GetUniformBufferParameter<FVariableParameters>(),
+    SetUniformBufferParameter(commandList, ComputeShader, GetUniformBufferParameter<FVariableParameters>(),
 		FVariableParametersRef::CreateUniformBufferImmediate(variables, UniformBuffer_SingleDraw));
 }
 
-void FFishShader::cleanupShaderData(FRHICommandList& commandList)
+void FFishShader::cleanupShaderData(FRHICommandList& commandList, FRHIComputeShader* ComputeShader)
 {
 	if (m_shaderResource.IsBound())
-		commandList.SetUAVParameter(GetComputeShader(), m_shaderResource.GetBaseIndex(), FUnorderedAccessViewRHIRef());
+        commandList.SetUAVParameter(ComputeShader, m_shaderResource.GetBaseIndex(), FUnorderedAccessViewRHIRef());
 }
 
 IMPLEMENT_SHADER_TYPE(, FFishShader, TEXT("/Plugin/ShaderFishPlugin/ComputeFishShader.usf"),       TEXT("VS_test"),       SF_Compute)

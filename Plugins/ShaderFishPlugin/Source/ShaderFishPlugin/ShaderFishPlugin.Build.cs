@@ -6,7 +6,8 @@ public class ShaderFishPlugin : ModuleRules
 {
 	public ShaderFishPlugin(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+        bEnableExceptions = true;
+        CppStandard = CppStandardVersion.Cpp17;
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
@@ -29,7 +30,8 @@ public class ShaderFishPlugin : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "RenderCore",
-                "RHI"
+                "Projects",
+                "RHI",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -42,6 +44,7 @@ public class ShaderFishPlugin : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+                "Projects",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
