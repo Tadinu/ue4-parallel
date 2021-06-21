@@ -201,7 +201,6 @@ void AFishAgent::Tick(float DeltaTime)
 				transform.SetRotation(FRotationMatrix::MakeFromX(FVector(m_gpuFishStates[i].velocity[0], m_gpuFishStates[i].velocity[1], m_gpuFishStates[i].velocity[2])).Rotator().Add(0.f, -90.f, 0.f).Quaternion());
 				m_instancedStaticMeshComponent->UpdateInstanceTransform(m_gpuFishStates[i].instanceId, transform, true, false);
 			}
-			m_instancedStaticMeshComponent->ReleasePerInstanceRenderData();
 			m_instancedStaticMeshComponent->MarkRenderStateDirty();
 			m_elapsedTime = 0.f;
 		} else {
@@ -298,7 +297,6 @@ void AFishAgent::cpuCalculate(const TArray<TArray<TSharedPtr<FishState>>>& agent
         m_instancedStaticMeshComponent->UpdateInstanceTransform(agents[i][0]->instanceId, transform, false, false);
 	}
 
-	m_instancedStaticMeshComponent->ReleasePerInstanceRenderData();
 	m_instancedStaticMeshComponent->MarkRenderStateDirty();
 
     Swap(m_currentStatesIndex, m_previousStatesIndex);
