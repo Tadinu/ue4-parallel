@@ -101,6 +101,8 @@ AFishAgent::AFishAgent()
 	PrimaryActorTick.bCanEverTick = true;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> StaticMeshOb(TEXT("StaticMesh'/Game/Fish/SM_fish'"));
 	m_staticMesh = StaticMeshOb.Object;
+    verify(m_staticMesh);
+    UE_LOG(LogTemp, Warning, TEXT("%ld"), m_staticMesh);
 }
 
 void AFishAgent::OnConstruction(const FTransform& Transform)
@@ -112,7 +114,7 @@ void AFishAgent::OnConstruction(const FTransform& Transform)
 	this->AddInstanceComponent(m_instancedStaticMeshComponent);
 
 	if (!m_isGpu) {
-		m_fishStates = new FishState*[m_fishNum];
+        m_fishStates.SetNum(m_fishNum);
 	}
 
 	for (int i = 0; i < m_fishNum; i++) {
@@ -138,13 +140,13 @@ void AFishAgent::OnConstruction(const FTransform& Transform)
 		} else {
 			FishState state;
 			FishState stateCopy;
-			m_fishStates[i] = new FishState[2];
+            m_fishStates[i].SetNum(2);
 			stateCopy.instanceId = state.instanceId = instanceId;;
 			stateCopy.position = state.position = randomPos;
 			stateCopy.velocity = state.velocity = randRotator.Vector() * 10000;
 			stateCopy.acceleration = state.acceleration = FVector::ZeroVector;
-            m_fishStates[i][m_currentStatesIndex] = MoveTemp(state);
-            m_fishStates[i][m_previousStatesIndex] = MoveTemp(stateCopy);
+            m_fishStates[i][m_currentStatesIndex] = MakeShared<FishState>(state);
+            m_fishStates[i][m_previousStatesIndex] = MakeShared<FishState>(stateCopy);
 		}
 	}
 }
@@ -154,7 +156,7 @@ void AFishAgent::BeginPlay()
 	Super::BeginPlay();
 
 	if (m_isGpu) {
-		m_gpuProcessing = new FishProcessing(m_fishNum,
+        m_gpuProcessing = MakeUnique<FishProcessing>(m_fishNum,
 			m_radiusCohesion, m_radiusSeparation, m_radiusAlignment,
 			m_mapSize.X, m_mapSize.Y, m_mapSize.Z,
 			m_kCohesion, m_kSeparation, m_kAlignment,
@@ -215,7 +217,7 @@ void AFishAgent::Tick(float DeltaTime)
 	}
 }
 
-void AFishAgent::cpuCalculate(FishState **&agents, float DeltaTime, bool isSingleThread)
+void AFishAgent::cpuCalculate(const TArray<TArray<TSharedPtr<FishState>>>& agents, float DeltaTime, bool isSingleThread)
 {
 	float kCoh = m_kCohesion, kSep = m_kSeparation, kAlign = m_kAlignment;
 	float rCohesion = m_radiusCohesion, rSeparation = m_radiusSeparation, rAlignment = m_radiusAlignment;
@@ -232,18 +234,18 @@ void AFishAgent::cpuCalculate(FishState **&agents, float DeltaTime, bool isSingl
 		int32 cohesionCnt = 0, separationCnt = 0, alignmentCnt = 0;
 		for (int i = 0; i < cnt; i++) {
 			if (i != fishNum) {
-				float distance = FVector::Distance(agents[i][previousStatesIndex].position, agents[fishNum][previousStatesIndex].position);
+                float distance = FVector::Distance(agents[i][previousStatesIndex]->position, agents[fishNum][previousStatesIndex]->position);
 				if (distance > 0) {
 					if (distance < rCohesion) {
-						cohesion += agents[i][previousStatesIndex].position;
+                        cohesion += agents[i][previousStatesIndex]->position;
 						cohesionCnt++;
 					}
 					if (distance < rSeparation) {
-						separation += agents[i][previousStatesIndex].position - agents[fishNum][previousStatesIndex].position;
+                        separation += agents[i][previousStatesIndex]->position - agents[fishNum][previousStatesIndex]->position;
 						separationCnt++;
 					}
 					if (distance < rAlignment) {
-						alignment += agents[i][previousStatesIndex].velocity;
+                        alignment += agents[i][previousStatesIndex]->velocity;
 						alignmentCnt++;
 					}
 				}
@@ -252,7 +254,7 @@ void AFishAgent::cpuCalculate(FishState **&agents, float DeltaTime, bool isSingl
 
 		if (cohesionCnt != 0) {
 			cohesion /= cohesionCnt;
-			cohesion -= agents[fishNum][previousStatesIndex].position;
+            cohesion -= agents[fishNum][previousStatesIndex]->position;
 			cohesion.Normalize();
 		}
 
@@ -267,38 +269,39 @@ void AFishAgent::cpuCalculate(FishState **&agents, float DeltaTime, bool isSingl
 			alignment.Normalize();
 		}
 
-		agents[fishNum][currentStatesIndex].acceleration = (cohesion * kCoh + separation * kSep + alignment * kAlign).GetClampedToMaxSize(maxAccel);
-		agents[fishNum][currentStatesIndex].acceleration.Z = 0;
+        agents[fishNum][currentStatesIndex]->acceleration = (cohesion * kCoh + separation * kSep + alignment * kAlign).GetClampedToMaxSize(maxAccel);
+        agents[fishNum][currentStatesIndex]->acceleration.Z = 0;
 
-		agents[fishNum][currentStatesIndex].velocity += agents[fishNum][currentStatesIndex].acceleration * DeltaTime;
-		agents[fishNum][currentStatesIndex].velocity  = agents[fishNum][currentStatesIndex].velocity.GetClampedToMaxSize(maxVel);
-		agents[fishNum][currentStatesIndex].position += agents[fishNum][currentStatesIndex].velocity * DeltaTime;
-		agents[fishNum][currentStatesIndex].velocity = checkMapRange(mapSz, agents[fishNum][currentStatesIndex].position, agents[fishNum][currentStatesIndex].velocity);
+        agents[fishNum][currentStatesIndex]->velocity += agents[fishNum][currentStatesIndex]->acceleration * DeltaTime;
+        agents[fishNum][currentStatesIndex]->velocity  = agents[fishNum][currentStatesIndex]->velocity.GetClampedToMaxSize(maxVel);
+        agents[fishNum][currentStatesIndex]->position += agents[fishNum][currentStatesIndex]->velocity * DeltaTime;
+        agents[fishNum][currentStatesIndex]->velocity = checkMapRange(mapSz, agents[fishNum][currentStatesIndex]->position, agents[fishNum][currentStatesIndex]->velocity);
+        //UE_LOG(LogTemp, Warning, TEXT("%d %d %s %s"), fishNum, currentStatesIndex, *agents[fishNum][currentStatesIndex]->position.ToString(), *agents[fishNum][currentStatesIndex]->velocity.ToString());
 	}, isSingleThread);
 
 	for (int i = 0; i < cnt; i++) {
 		FHitResult hit(ForceInit);
-		if (collisionDetected(agents[i][previousStatesIndex].position, agents[i][currentStatesIndex].position, hit)) {
-			agents[i][currentStatesIndex].position -= agents[i][currentStatesIndex].velocity * DeltaTime;
-			agents[i][currentStatesIndex].velocity *= -1.0;
-			agents[i][currentStatesIndex].position += agents[i][currentStatesIndex].velocity * DeltaTime;
+        if (collisionDetected(agents[i][previousStatesIndex]->position, agents[i][currentStatesIndex]->position, hit)) {
+            agents[i][currentStatesIndex]->position -= agents[i][currentStatesIndex]->velocity * DeltaTime;
+            agents[i][currentStatesIndex]->velocity *= -1.0;
+            agents[i][currentStatesIndex]->position += agents[i][currentStatesIndex]->velocity * DeltaTime;
 		}
 	}
 
 	for (int i = 0; i < cnt; i++) {
 		FTransform transform;
-		m_instancedStaticMeshComponent->GetInstanceTransform(agents[i][0].instanceId, transform);
-		transform.SetLocation(agents[i][0].position);
-		FVector direction = agents[i][0].velocity;
+        m_instancedStaticMeshComponent->GetInstanceTransform(agents[i][0]->instanceId, transform);
+        transform.SetLocation(agents[i][0]->position);
+        FVector direction = agents[i][0]->velocity;
 		direction.Normalize();
 		transform.SetRotation(FRotationMatrix::MakeFromX(direction).Rotator().Add(0.f, -90.f, 0.f).Quaternion());
-		m_instancedStaticMeshComponent->UpdateInstanceTransform(agents[i][0].instanceId, transform, false, false);
+        m_instancedStaticMeshComponent->UpdateInstanceTransform(agents[i][0]->instanceId, transform, false, false);
 	}
 
 	m_instancedStaticMeshComponent->ReleasePerInstanceRenderData();
 	m_instancedStaticMeshComponent->MarkRenderStateDirty();
 
-	swapFishStatesIndexes();
+    Swap(m_currentStatesIndex, m_previousStatesIndex);
 }
 
 bool AFishAgent::collisionDetected(const FVector &start, const FVector &end, FHitResult &hitResult)
@@ -308,11 +311,4 @@ bool AFishAgent::collisionDetected(const FVector &start, const FVector &end, FHi
 	RV_TraceParams.bReturnPhysicalMaterial = false;
 
 	return GetWorld()->SweepSingleByChannel(hitResult, start, end, FQuat(), ECC_WorldStatic, FCollisionShape::MakeSphere(200), RV_TraceParams);
-}
-
-void AFishAgent::swapFishStatesIndexes()
-{
-	int32 tmp = m_currentStatesIndex;
-	m_currentStatesIndex = m_previousStatesIndex;
-	m_previousStatesIndex = tmp;
 }
