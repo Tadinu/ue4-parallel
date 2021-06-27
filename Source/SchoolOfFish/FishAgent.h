@@ -5,15 +5,19 @@
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
+#include "Chaos/KinematicGeometryParticles.h"
 #include "FishProcessing.h"
+#include "SchoolOfFish.h"
 #include "FishAgent.generated.h"
 
+#if !FISH_ISPC
 struct FishState {
 	int32 instanceId;
 	FVector position;
 	FVector velocity;
 	FVector acceleration;
 };
+#endif
 
 UCLASS()
 class SCHOOLOFFISH_API AFishAgent : public AActor
@@ -29,7 +33,11 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 protected:
-    void cpuCalculate(const TArray<TArray<TSharedPtr<FishState>>>& agents, float DeltaTime, bool isSingleThread);
+#if FISH_ISPC
+    void cpuCalculate(float DeltaTime);
+#else
+    void cpuCalculate(float DeltaTime, bool isSingleThread);
+#endif
 	bool collisionDetected(const FVector &start, const FVector &end, FHitResult &hitResult);
 
 private:
@@ -62,8 +70,15 @@ private:
     float m_kAlignment = 0.f;
 	// ~
 
+#if FISH_ISPC
+    //TKinematicGeometryParticles<float, 3, EGeometryParticlesSimType::RigidBody> m_fishStates;
+    TArray<TArray<FVector>> m_fishesPositions;
+    TArray<TArray<FVector>> m_fishesVels;
+    TArray<TArray<FVector>> m_fishesAccels;
+#else
 	// Array of fish states if flocking behaviour calculates on CPU
     TArray<TArray<TSharedPtr<FishState>>> m_fishStates;
+#endif
 
 	// index of fish states array where stored current states of fish
     UPROPERTY()
@@ -71,7 +86,7 @@ private:
 
 	// index of fish states array where stored previous states of fish
     UPROPERTY()
-    int32 m_previousStatesIndex = 0;
+    int32 m_previousStatesIndex = 1;
 
 	// Array of fish states if flocking behaviour calculates on GPU
 	TArray<State> m_gpuFishStates;

@@ -4,3 +4,4 @@
 
 #include "CoreMinimal.h"
 
+#define FISH_ISPC (1 && INTEL_ISPC)
